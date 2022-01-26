@@ -20,6 +20,7 @@ import 'package:penon/database/database.dart';
 import 'package:penon/models/invoice_items_model.dart';
 import 'package:penon/models/item_model.dart';
 import 'package:penon/models/party_model.dart';
+import 'package:penon/models/purchase_model.dart';
 import 'package:random_string/random_string.dart';
 
 import 'components/addInvoiceItemBottomSheet.dart';
@@ -112,10 +113,11 @@ class _AddPurchaseState extends State<AddPurchase> {
   void selectItem(String selected) {
     setState(() {
       isLoading = true;
-      _selectedItem = selected;
     });
     selectedItemModel =
-        itemModelMenu.firstWhere((element) => element.itemName == selected);
+        itemModelMenu.firstWhere((element) => element.itemId == selected);
+    _selectedItem = selectedItemModel!.itemName;
+
     calcualateQty(selectedItemModel!);
   }
 
@@ -174,6 +176,8 @@ class _AddPurchaseState extends State<AddPurchase> {
         sgst: sgst,
         igst: igst,
         cess: 0);
+    // PurchaseModel purchase = PurchaseModel(invoiceNo: invoiceNoController.text, invoiceId: invoiceId)
+
     invoiceItemsController.addItemToInvoice(invoiceItem);
     await showModalBottomSheet(
       isScrollControlled: true,
@@ -346,9 +350,9 @@ class _AddPurchaseState extends State<AddPurchase> {
           ),
           body: ModalProgressHUD(
             inAsyncCall: isLoading,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -513,7 +517,8 @@ class _AddPurchaseState extends State<AddPurchase> {
                                     print(product.itemName);
                                     _selectedItem = product.itemName;
                                     selectedItemModel = product;
-                                    selectItem(_selectedItem!);
+                                    print(selectedItemModel!.itemId);
+                                    selectItem(selectedItemModel!.itemId!);
                                     // Navigator.of(context).push(MaterialPageRoute(
                                     //     builder: (context) =>
                                     //         ViewProductPage(product: product)));

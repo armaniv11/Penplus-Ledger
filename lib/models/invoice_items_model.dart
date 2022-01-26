@@ -6,7 +6,7 @@ part 'invoice_items_model.g.dart';
 @JsonSerializable()
 class InvoiceItemsModel {
   ItemModel? item;
-  String? itemId;
+
   String? uom;
   double? quantity;
   double? unitPrice;
@@ -19,7 +19,6 @@ class InvoiceItemsModel {
 
   InvoiceItemsModel({
     this.item,
-    this.itemId,
     this.uom = 'Pcs',
     this.quantity = 1,
     this.unitPrice = 0,

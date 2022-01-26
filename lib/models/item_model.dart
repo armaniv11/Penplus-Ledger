@@ -6,7 +6,7 @@ part 'item_model.g.dart';
 class ItemModel {
   String? itemName;
   String? itemHSN;
-  String? pid;
+  String? itemId;
   int? gst;
   bool? gstInSP;
   double? purchasePrice;
@@ -26,7 +26,7 @@ class ItemModel {
   ItemModel(
       {this.itemName,
       this.itemHSN,
-      this.pid,
+      this.itemId,
       this.gst,
       this.gstInSP,
       this.purchasePrice = 0,

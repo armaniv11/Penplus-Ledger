@@ -13,24 +13,25 @@ class CompanyModel {
   String? gstType;
   String? gstNo;
   String? website;
+  String? session;
   @TimestampConvertDatetime()
   DateTime? createdAt;
   @TimestampConvertDatetime()
   DateTime? updatedAt;
 
-  CompanyModel({
-    this.firmName,
-    this.firmAddress,
-    this.state,
-    this.emailID,
-    this.mob1,
-    this.mob2,
-    this.gstType,
-    this.gstNo,
-    this.website,
-    this.createdAt,
-    this.updatedAt,
-  });
+  CompanyModel(
+      {this.firmName,
+      this.firmAddress,
+      this.state,
+      this.emailID,
+      this.mob1,
+      this.mob2,
+      this.gstType,
+      this.gstNo,
+      this.website,
+      this.createdAt,
+      this.updatedAt,
+      this.session = '2021-22'});
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) =>
       _$CompanyModelFromJson(json);
@@ -39,18 +40,19 @@ class CompanyModel {
 
   factory CompanyModel.fromDoc(DocumentSnapshot doc) {
     return CompanyModel(
-      // Extra fields
-      firmName: doc["firmName"],
-      firmAddress: doc['firmAddress'],
-      state: doc['state'],
-      emailID: doc['emailID'],
-      mob1: doc['mob1'],
-      mob2: doc['mob2'],
-      gstType: doc['gstType'],
-      gstNo: doc['gstNo'],
-      website: doc['website'],
-      createdAt: doc['createdAt'], // just incude the firebase import
-    );
+        // Extra fields
+        firmName: doc["firmName"],
+        firmAddress: doc['firmAddress'],
+        state: doc['state'],
+        emailID: doc['emailID'],
+        mob1: doc['mob1'],
+        mob2: doc['mob2'],
+        gstType: doc['gstType'],
+        gstNo: doc['gstNo'],
+        website: doc['website'],
+        createdAt: doc['createdAt'],
+        session: doc['session'] ?? "2021-22" // just incude the firebase import
+        );
   }
 }
 

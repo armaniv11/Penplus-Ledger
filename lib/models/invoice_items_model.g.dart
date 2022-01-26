@@ -11,7 +11,6 @@ InvoiceItemsModel _$InvoiceItemsModelFromJson(Map<String, dynamic> json) =>
       item: json['item'] == null
           ? null
           : ItemModel.fromJson(json['item'] as Map<String, dynamic>),
-      itemId: json['itemId'] as String?,
       uom: json['uom'] as String? ?? 'Pcs',
       quantity: (json['quantity'] as num?)?.toDouble() ?? 1,
       unitPrice: (json['unitPrice'] as num?)?.toDouble() ?? 0,
@@ -26,7 +25,6 @@ InvoiceItemsModel _$InvoiceItemsModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$InvoiceItemsModelToJson(InvoiceItemsModel instance) =>
     <String, dynamic>{
       'item': instance.item,
-      'itemId': instance.itemId,
       'uom': instance.uom,
       'quantity': instance.quantity,
       'unitPrice': instance.unitPrice,

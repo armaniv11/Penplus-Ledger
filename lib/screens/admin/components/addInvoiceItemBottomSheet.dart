@@ -14,15 +14,12 @@ import 'package:penon/screens/admin/components/invoice_items_grid.dart';
 import 'package:random_string/random_string.dart';
 
 class AddInvoiceItemBottomSheet extends StatefulWidget {
-  final PartyModel partyName;
-  final String invoiceNo;
+  final PartyModel? partyName;
+  final String? invoiceNo;
   final invoiceDate;
 
   const AddInvoiceItemBottomSheet(
-      {Key? key,
-      required this.partyName,
-      required this.invoiceNo,
-      required this.invoiceDate})
+      {Key? key, this.partyName, this.invoiceNo, this.invoiceDate})
       : super(key: key);
   // final ValueChanged<bool> callback;
 
@@ -47,7 +44,7 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
     //   asd.add(element.toJson());
     // });
     PurchaseModel purchase = PurchaseModel(
-        partyName: widget.partyName.partyName,
+        partyName: widget.partyName?.partyName,
         invoiceDate: widget.invoiceDate,
         invoiceItems: invoiceItemsController.invoiceItems,
         invoiceNo: widget.invoiceNo,
@@ -55,6 +52,7 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
         createdAt: DateTime.now(),
         cashDiscount: double.tryParse(discountController.text),
         paidAmount: double.tryParse(paidController.text),
+        dueAmount: double.tryParse(dueController.text),
         companyId: '8874030006');
     databaseService.addPurchase(purchase: purchase).then((value) {
       return Flushbar(
@@ -157,11 +155,16 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
                         );
                       }),
                       Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.white,
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -211,12 +214,8 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
                               reverted: true,
                               changed: changePaid,
                               width: size.width / 3),
-                          customTextFormField(
-                            dueController,
-                            "Due(Rs)",
-                            null,
-                            width: size.width / 3,
-                          ),
+                          customTextFormField(dueController, "Due(Rs)", null,
+                              width: size.width / 3, enabled: false),
                         ],
                       ),
                       Row(

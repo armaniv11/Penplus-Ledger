@@ -21,11 +21,10 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
   Widget build(BuildContext context) {
     bool? opt1 = widget.option;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(6.0),
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.yellow[800]!.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(12)),
+            color: Colors.white, borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.only(left: 12, right: 6),
           child: Row(

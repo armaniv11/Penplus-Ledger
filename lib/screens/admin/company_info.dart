@@ -46,6 +46,8 @@ class _AddCompanyState extends State<AddCompany> {
 
   List subCategoryMenu = [""];
   Map<String, dynamic> subCategoryMap = {};
+  List<String> sessionMenu = AppConstants.session;
+  String selectedSession = '2021-22';
 
   File? productImage1;
   bool isFeatured = false;
@@ -231,6 +233,12 @@ class _AddCompanyState extends State<AddCompany> {
     });
   }
 
+  void selectSession(String selected) {
+    setState(() {
+      selectedSession = selected;
+    });
+  }
+
   bool? isRentable = false;
   bool? isCOD = true;
   bool? isReplacable = true;
@@ -389,6 +397,11 @@ class _AddCompanyState extends State<AddCompany> {
                         size: 16,
                       ),
                     ),
+                    CustomDropDown(
+                        heading: "Session",
+                        items: sessionMenu,
+                        selected: selectedSession,
+                        callBack: selectSession),
                     InkWell(
                         onTap: () {
                           saveCompany();

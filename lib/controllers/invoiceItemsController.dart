@@ -34,10 +34,27 @@ class InvoiceItemsController extends GetxController {
   }
 
   // this add invoice Item to Invoice
-  addItemToInvoice(InvoiceItemsModel item) {
+  addItemToInvoice(InvoiceItemsModel item) async {
     // String msg = "${product.name} added to Cart !";
     //   cartItems.add(items);
-    invoiceItems.add(item);
+    int itemIndex = invoiceItems
+        .indexWhere((element) => element.item!.itemId == item.item!.itemId);
+    print(item.item!.itemId);
+    print(itemIndex);
+    if (itemIndex == -1) {
+      print("Match");
+      invoiceItems.add(item);
+    } else {
+      print("replaced");
+      invoiceItems[itemIndex] = item;
+    }
+
+    // invoiceItems.addIf(
+    //     invoiceItems
+    //             .firstWhereOrNull((element) => element.itemId == item.itemId) ==
+    //         null,
+    //     item);
+    // invoiceItems.add(item);
     // print("Cart Length: ${allParties.length}");
     // GetStorage().write('allparties', allParties);
   }
