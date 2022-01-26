@@ -9,7 +9,7 @@ part of 'item_model.dart';
 ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => ItemModel(
       itemName: json['itemName'] as String?,
       itemHSN: json['itemHSN'] as String?,
-      pid: json['pid'] as String?,
+      itemId: json['itemId'] as String?,
       gst: json['gst'] as int?,
       gstInSP: json['gstInSP'] as bool?,
       purchasePrice: (json['purchasePrice'] as num?)?.toDouble() ?? 0,
@@ -32,7 +32,7 @@ ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => ItemModel(
 Map<String, dynamic> _$ItemModelToJson(ItemModel instance) => <String, dynamic>{
       'itemName': instance.itemName,
       'itemHSN': instance.itemHSN,
-      'pid': instance.pid,
+      'itemId': instance.itemId,
       'gst': instance.gst,
       'gstInSP': instance.gstInSP,
       'purchasePrice': instance.purchasePrice,

@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:penon/models/item_model.dart';
+import 'package:penon/models/party_model.dart';
 
 Future<String> customGetImage() async {
   // await Future.delayed(Duration(milliseconds: 500));
@@ -18,6 +20,36 @@ Future<String> customGetImage() async {
     filepath = pickedFile.path;
   }
   return filepath;
+}
+
+Future<List<ItemModel>> searchItem(
+    List<ItemModel> products, String searchText) async {
+  List<ItemModel> asd = <ItemModel>[];
+  products.forEach((element) {
+    print(element.itemName);
+    print(searchText);
+    if (element.itemName!.contains(searchText)) {
+      print(element.itemName);
+      print("found");
+      asd.add(element);
+    }
+  });
+  return asd;
+}
+
+Future<List<PartyModel>> searchParty(
+    List<PartyModel> products, String searchText) async {
+  List<PartyModel> asd = <PartyModel>[];
+  products.forEach((element) {
+    // print(element.itemName);
+    print(searchText);
+    if (element.partyName.contains(searchText)) {
+      print(element.partyName);
+      print("found");
+      asd.add(element);
+    }
+  });
+  return asd;
 }
 
 

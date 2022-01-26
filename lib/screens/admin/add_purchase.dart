@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:penon/appconstants.dart';
@@ -13,6 +14,7 @@ import 'package:penon/controllers/itemController.dart';
 import 'package:penon/controllers/partyController.dart';
 import 'package:penon/controllers/invoiceItemsController.dart';
 import 'package:penon/custom_classes/custom_classes.dart';
+import 'package:penon/custom_functions/custom_functions.dart';
 import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/database/database.dart';
 import 'package:penon/models/invoice_items_model.dart';
@@ -66,11 +68,11 @@ class _AddPurchaseState extends State<AddPurchase> {
 
   bool gstInSP = false;
   bool isLoading = true;
+  String? selectedInvoiceDate;
 
   DatabaseService databaseService = DatabaseService();
   final _formKey = GlobalKey<FormState>();
   PartyModel? selectedPartyModel;
-
   void selectParty(String selected) {
     setState(() {
       _selectedParty = selected;
@@ -99,6 +101,10 @@ class _AddPurchaseState extends State<AddPurchase> {
       print(selected);
       calculateFieldWise();
     });
+  }
+
+  void selectInvoiceDate(String selected) {
+    selectedInvoiceDate = selected;
   }
 
   ItemModel? selectedItemModel;
@@ -158,7 +164,7 @@ class _AddPurchaseState extends State<AddPurchase> {
 
   saveItem() async {
     InvoiceItemsModel invoiceItem = InvoiceItemsModel(
-        itemName: _selectedItem,
+        item: selectedItemModel,
         uom: _selectedUOM,
         quantity: double.tryParse(quantityController.text),
         unitPrice: double.tryParse(unitPriceController.text),
@@ -177,6 +183,7 @@ class _AddPurchaseState extends State<AddPurchase> {
         return AddInvoiceItemBottomSheet(
           partyName: selectedPartyModel!,
           invoiceNo: invoiceNoController.text,
+          invoiceDate: selectedInvoiceDate,
 
           // callback: changeCart,
         );
@@ -200,6 +207,7 @@ class _AddPurchaseState extends State<AddPurchase> {
     partyModelMenu = await partyController.allParties.map((e) => e).toList();
     itemMenu = itemController.allItems.map((e) => e.itemName!).toList();
     itemModelMenu = itemController.allItems.map((e) => e).toList();
+    selectedInvoiceDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     setState(() {
       isLoading = false;
@@ -294,7 +302,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                                   ? InkWell(
                                       onTap: () async {
                                         Flushbar(
-                                          title: "Success!!",
+                                          title: "Oops!!",
                                           message: "Invoice has 0 items!!",
                                           duration: const Duration(seconds: 3),
                                         )..show(context);
@@ -315,6 +323,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                                               partyName: selectedPartyModel!,
                                               invoiceNo:
                                                   invoiceNoController.text,
+                                              invoiceDate: selectedInvoiceDate,
 
                                               // callback: changeCart,
                                             );
@@ -351,25 +360,176 @@ class _AddPurchaseState extends State<AddPurchase> {
                           size: 16,
                         ),
                         validationEnabled: true),
-                    CustomDateField(heading: "Invoice Date"),
-                    CustomDropDown(
-                        heading: "Party",
-                        items: partyMenu,
-                        selected: _selectedParty,
-                        callBack: selectParty),
-                    // customTextFormField(
-                    //   hsnController,
-                    //   "Item HSN",
-                    //   Icon(
-                    //     FontAwesomeIcons.gripVertical,
-                    //     size: 16,
-                    //   ),
-                    // ),
-                    CustomDropDown(
-                        heading: "Item",
-                        items: itemMenu,
-                        selected: _selectedItem,
-                        callBack: selectItem),
+                    CustomDateField(
+                      heading: "Invoice Date",
+                      callBack: selectInvoiceDate,
+                    ),
+                    // CustomDropDown(
+                    //     heading: "Party",
+                    //     items: partyMenu,
+                    //     selected: _selectedParty,
+                    //     callBack: selectParty),
+                    // // customTextFormField(
+                    // //   hsnController,
+                    // //   "Item HSN",
+                    // //   Icon(
+                    // //     FontAwesomeIcons.gripVertical,
+                    // //     size: 16,
+                    // //   ),
+                    // // ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 4, right: 4, top: 6, bottom: 6),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey[400]!),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 6, right: 6),
+                                child: Text(
+                                  "Party",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.grey[800]),
+                                ),
+                                // ignore: prefer_const_constructors
+                              ),
+                              SizedBox(
+                                  height: 20,
+                                  child: VerticalDivider(
+                                    color: Colors.blue,
+                                    thickness: 2,
+                                  )),
+                              Expanded(
+                                child: TypeAheadField(
+                                  debounceDuration: Duration(milliseconds: 500),
+                                  textFieldConfiguration:
+                                      TextFieldConfiguration(
+                                          textCapitalization:
+                                              TextCapitalization.words,
+                                          autofocus: false,
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 14),
+                                          decoration: InputDecoration(
+                                            fillColor: Colors.white,
+                                            filled: true,
+                                            // contentPadding: EdgeInsets.only(left: 10),
+                                            // suffixIcon: Icon(Icons.search),
+                                            hintText: _selectedParty,
+                                            border: InputBorder.none,
+                                          )),
+                                  suggestionsCallback: (party) async {
+                                    return searchParty(
+                                        partyController.allParties, party);
+                                  },
+                                  itemBuilder: (context, PartyModel party) {
+                                    return ListTile(
+                                      tileColor: Colors.white,
+                                      // leading: Icon(Icons.shopping_cart),
+                                      title: Text(party.partyName),
+                                      // subtitle: Text('\$${suggestion['price']}'),
+                                    );
+                                  },
+                                  onSuggestionSelected: (PartyModel party) {
+                                    print(party.partyName);
+                                    _selectedParty = party.partyName;
+                                    selectedPartyModel = party;
+                                    // Navigator.of(context).push(MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         ViewProductPage(product: product)));
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 4, right: 4, top: 6, bottom: 6),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey[400]!),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 6, right: 6),
+                                child: Text(
+                                  "Item ",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.grey[800]),
+                                ),
+                                // ignore: prefer_const_constructors
+                              ),
+                              SizedBox(
+                                  height: 20,
+                                  child: VerticalDivider(
+                                    color: Colors.blue,
+                                    thickness: 2,
+                                  )),
+                              Expanded(
+                                child: TypeAheadField(
+                                  debounceDuration:
+                                      Duration(milliseconds: 1000),
+                                  textFieldConfiguration:
+                                      TextFieldConfiguration(
+                                          textCapitalization:
+                                              TextCapitalization.words,
+                                          autofocus: false,
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 14),
+                                          decoration: InputDecoration(
+                                            fillColor: Colors.white,
+                                            filled: true,
+                                            // contentPadding: EdgeInsets.only(left: 10),
+                                            // suffixIcon: Icon(Icons.search),
+                                            hintText: _selectedItem,
+                                            border: InputBorder.none,
+                                          )),
+                                  suggestionsCallback: (product) async {
+                                    return searchItem(
+                                        itemController.allItems, product);
+                                  },
+                                  itemBuilder: (context, ItemModel product) {
+                                    return ListTile(
+                                      tileColor: Colors.white,
+                                      // leading: Icon(Icons.shopping_cart),
+                                      title: Text(product.itemName!),
+                                      // subtitle: Text('\$${suggestion['price']}'),
+                                    );
+                                  },
+                                  onSuggestionSelected: (ItemModel product) {
+                                    print(product.itemName);
+                                    _selectedItem = product.itemName;
+                                    selectedItemModel = product;
+                                    selectItem(_selectedItem!);
+                                    // Navigator.of(context).push(MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         ViewProductPage(product: product)));
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    // CustomDropDown(
+                    //     heading: "Item",
+                    //     items: itemMenu,
+                    //     selected: _selectedItem,
+                    //     callBack: selectItem),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -491,7 +651,29 @@ class _AddPurchaseState extends State<AddPurchase> {
                     //     : Container(),
                     InkWell(
                         onTap: () {
-                          saveItem();
+                          if (invoiceNoController.text.isEmpty) {
+                            Flushbar(
+                              title: "Oops!!",
+                              message: "Provide Invoice No!!",
+                              duration: const Duration(seconds: 2),
+                              backgroundColor: Colors.red[800]!,
+                            )..show(context);
+                          } else if (_selectedParty == null) {
+                            Flushbar(
+                              title: "Oops!!",
+                              message: "Please select a party!!",
+                              duration: const Duration(seconds: 2),
+                              backgroundColor: Colors.red[800]!,
+                            )..show(context);
+                          } else if (_selectedItem == null) {
+                            Flushbar(
+                              title: "Oops!!",
+                              message: "Please select an Item!!",
+                              duration: const Duration(seconds: 2),
+                              backgroundColor: Colors.red[800]!,
+                            )..show(context);
+                          } else
+                            saveItem();
                           // if (widget.productId == '')
                           //   saveProduct(productImage1, productController.text);
                           // else

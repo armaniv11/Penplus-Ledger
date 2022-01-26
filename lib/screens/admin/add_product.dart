@@ -171,7 +171,7 @@ class _AddProductState extends State<AddProduct> {
           itemName: itemNameController.text,
           itemHSN: hsnController.text,
           gst: int.tryParse(_selectedGST!),
-          pid: pid,
+          itemId: pid,
           gstInSP: gstInSP,
           purchasePrice: double.tryParse(purchasePriceController.text),
           sellPrice: double.tryParse(sellPriceController.text),

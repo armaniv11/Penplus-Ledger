@@ -9,6 +9,7 @@ class InvoiceItemsController extends GetxController {
   List<InvoiceItemsModel> invoiceItems = <InvoiceItemsModel>[].obs;
   RxDouble cashDiscount = 0.0.obs;
   RxDouble paidAmount = 0.0.obs;
+  RxDouble dueAmount = 0.0.obs;
   // double cartTaxes = 0.obs as double;
   // double cartBeforeTax = 0.obs as double;
 
@@ -23,7 +24,13 @@ class InvoiceItemsController extends GetxController {
   String get totalAfterDeduction {
     double asd = invoiceItems.fold(
         0, (sum, element) => sum + (element.total! * element.quantity!));
-    return (asd - cashDiscount.value - paidAmount.value).toStringAsFixed(2);
+
+    return (asd - cashDiscount.value).toStringAsFixed(2);
+  }
+
+  String get dueAfterPaid {
+    dueAmount.value = double.tryParse(totalAfterDeduction)! - paidAmount.value;
+    return dueAmount.value.toStringAsFixed(2);
   }
 
   // this add invoice Item to Invoice

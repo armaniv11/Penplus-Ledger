@@ -11,13 +11,18 @@ import 'package:penon/models/invoice_items_model.dart';
 import 'package:penon/models/party_model.dart';
 import 'package:penon/models/purchase_model.dart';
 import 'package:penon/screens/admin/components/invoice_items_grid.dart';
+import 'package:random_string/random_string.dart';
 
 class AddInvoiceItemBottomSheet extends StatefulWidget {
   final PartyModel partyName;
   final String invoiceNo;
+  final invoiceDate;
 
   const AddInvoiceItemBottomSheet(
-      {Key? key, required this.partyName, required this.invoiceNo})
+      {Key? key,
+      required this.partyName,
+      required this.invoiceNo,
+      required this.invoiceDate})
       : super(key: key);
   // final ValueChanged<bool> callback;
 
@@ -43,13 +48,18 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
     // });
     PurchaseModel purchase = PurchaseModel(
         partyName: widget.partyName.partyName,
+        invoiceDate: widget.invoiceDate,
         invoiceItems: invoiceItemsController.invoiceItems,
-        invoiceNo: '1',
-        invoiceId: "123",
+        invoiceNo: widget.invoiceNo,
+        invoiceId: randomAlphaNumeric(6),
+        createdAt: DateTime.now(),
+        cashDiscount: double.tryParse(discountController.text),
+        paidAmount: double.tryParse(paidController.text),
         companyId: '8874030006');
     databaseService.addPurchase(purchase: purchase).then((value) {
       return Flushbar(
         title: "Success",
+        message: "Purchase Invoice created Successfully",
         duration: Duration(seconds: 3),
       )..show(context);
     });
@@ -65,6 +75,12 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
   loadData() async {
     if (invoiceItemsController.cashDiscount != 0.0)
       discountController.text = invoiceItemsController.cashDiscount.toString();
+
+    if (invoiceItemsController.paidAmount != 0.0)
+      paidController.text = invoiceItemsController.paidAmount.toString();
+
+    if (invoiceItemsController.dueAmount != 0.0)
+      dueController.text = invoiceItemsController.dueAfterPaid;
   }
 
   changeDisc(String data) {
@@ -74,8 +90,9 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
     print(invoiceItemsController.totalAfterDeduction);
   }
 
-  changePaid(String data) {
+  changePaid(String data) async {
     if (data.isNotEmpty) invoiceItemsController.addPaidAmount(data);
+    dueController.text = await invoiceItemsController.dueAfterPaid;
     print(data);
     print(invoiceItemsController.paidAmount);
   }
@@ -186,7 +203,7 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
                       Row(
                         children: [
                           customTextFormField(
-                              discountController, "Discount(Rs)", null,
+                              discountController, "Disc.(Rs)", null,
                               reverted: true,
                               changed: changeDisc,
                               width: size.width / 3),
@@ -240,7 +257,7 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
                                 },
                                 child: customButton("Add",
                                     width: size.width / 2.1,
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor: Colors.yellow,
                                     padding: 4,
                                     containerHeight: 50)),
                           ),

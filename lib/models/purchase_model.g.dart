@@ -30,20 +30,18 @@ PurchaseModel _$PurchaseModelFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['updatedAt'] as String),
     );
 
-Map<String, dynamic> _$PurchaseModelToJson(PurchaseModel instance) {
-  var asdf = instance.invoiceItems!.map((e) => (e).toJson()).toList();
-  return <String, dynamic>{
-    'partyName': instance.partyName,
-    'invoiceNo': instance.invoiceNo,
-    'invoiceDate': instance.invoiceDate?.toIso8601String(),
-    'cashDiscount': instance.cashDiscount,
-    'grandTotal': instance.grandTotal,
-    'paidAmount': instance.paidAmount,
-    'dueAmount': instance.dueAmount,
-    'invoiceId': instance.invoiceId,
-    'companyId': instance.companyId,
-    'invoiceItems': asdf,
-    'createdAt': instance.createdAt?.toIso8601String(),
-    'updatedAt': instance.updatedAt?.toIso8601String(),
-  };
-}
+Map<String, dynamic> _$PurchaseModelToJson(PurchaseModel instance) =>
+    <String, dynamic>{
+      'partyName': instance.partyName,
+      'invoiceNo': instance.invoiceNo,
+      'invoiceDate': instance.invoiceDate?.toIso8601String(),
+      'cashDiscount': instance.cashDiscount,
+      'grandTotal': instance.grandTotal,
+      'paidAmount': instance.paidAmount,
+      'dueAmount': instance.dueAmount,
+      'invoiceId': instance.invoiceId,
+      'companyId': instance.companyId,
+      'invoiceItems': instance.invoiceItems,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
+    };

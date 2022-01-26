@@ -139,7 +139,7 @@ class DatabaseService {
   Future addItem({required ItemModel itemDetails}) async {
     await FirebaseFirestore.instance
         .collection('Items')
-        .doc(itemDetails.pid)
+        .doc(itemDetails.itemId)
         .set(
           itemDetails.toJson(),
         );
@@ -155,6 +155,8 @@ class DatabaseService {
   }
 
   Future addPurchase({required PurchaseModel purchase}) async {
+    // Map<String, dynamic> pur = purchase.toJson();
+    // pur['invoiceId'] = FieldValue.increment(1);
     await FirebaseFirestore.instance
         .collection('Purchase')
         .doc(purchase.invoiceId)

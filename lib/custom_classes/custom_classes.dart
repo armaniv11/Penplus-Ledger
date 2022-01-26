@@ -60,13 +60,16 @@ class CustomDateField extends StatefulWidget {
   final String heading;
   final Color bgColor;
   final Color headingColor;
+  final ValueChanged<String>? callBack;
+
   const CustomDateField(
       {Key? key,
       this.width = double.maxFinite,
       this.height = 20.0,
       required this.heading,
       this.bgColor = Colors.white,
-      this.headingColor = Colors.grey})
+      this.headingColor = Colors.grey,
+      required this.callBack})
       : super(key: key);
 
   @override
@@ -122,6 +125,7 @@ class _CustomDateFieldState extends State<CustomDateField> {
                 if (choice != null)
                   setState(() {
                     dateSelected = DateFormat('yyyy-MM-dd').format(choice);
+                    widget.callBack!(dateSelected);
                   });
               },
               child: Icon(

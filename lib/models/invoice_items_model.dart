@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:penon/models/item_model.dart';
 part 'invoice_items_model.g.dart';
 
 @JsonSerializable()
 class InvoiceItemsModel {
-  String? itemName;
+  ItemModel? item;
   String? itemId;
   String? uom;
   double? quantity;
@@ -17,7 +18,7 @@ class InvoiceItemsModel {
   double? cess;
 
   InvoiceItemsModel({
-    this.itemName,
+    this.item,
     this.itemId,
     this.uom = 'Pcs',
     this.quantity = 1,
