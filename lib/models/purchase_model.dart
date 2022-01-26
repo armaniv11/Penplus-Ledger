@@ -17,6 +17,7 @@ class PurchaseModel {
   double? dueAmount;
   String invoiceId;
   String? companyId;
+  bool isDeleted;
   List<InvoiceItemsModel>? invoiceItems;
   @TimestampConvertDatetime()
   DateTime? createdAt;
@@ -35,6 +36,7 @@ class PurchaseModel {
       this.createdAt,
       this.companyId,
       this.invoiceItems,
+      this.isDeleted = false,
       this.updatedAt});
 
   factory PurchaseModel.fromJson(Map<String, dynamic> json) =>

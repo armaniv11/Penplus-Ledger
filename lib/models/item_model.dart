@@ -18,6 +18,7 @@ class ItemModel {
   double? rentAmt;
   double? securityAmt;
   String? companyId;
+  bool isDeleted;
   @TimestampConvertDatetime()
   DateTime? createdAt;
   @TimestampConvertDatetime()
@@ -39,6 +40,7 @@ class ItemModel {
       this.securityAmt = 0,
       this.companyId,
       this.createdAt,
+      this.isDeleted = false,
       this.updatedAt});
 
   factory ItemModel.fromJson(Map<String, dynamic> json) =>

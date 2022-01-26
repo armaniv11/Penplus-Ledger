@@ -15,6 +15,7 @@ class PartyModel {
   String? openingBal;
   String? openingType;
   String companyId;
+  bool isDeleted;
   @TimestampConvertDatetime()
   DateTime? createdAt;
   @TimestampConvertDatetime()
@@ -31,6 +32,7 @@ class PartyModel {
       this.email,
       this.openingBal,
       this.openingType,
+      this.isDeleted = false,
       required this.companyId});
 
   factory PartyModel.fromJson(Map<String, dynamic> json) =>

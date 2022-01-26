@@ -14,6 +14,7 @@ class CompanyModel {
   String? gstNo;
   String? website;
   String? session;
+  bool isDeleted;
   @TimestampConvertDatetime()
   DateTime? createdAt;
   @TimestampConvertDatetime()
@@ -31,6 +32,7 @@ class CompanyModel {
       this.website,
       this.createdAt,
       this.updatedAt,
+      this.isDeleted = false,
       this.session = '2021-22'});
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) =>
