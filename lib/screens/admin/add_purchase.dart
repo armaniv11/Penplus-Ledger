@@ -74,13 +74,16 @@ class _AddPurchaseState extends State<AddPurchase> {
   DatabaseService databaseService = DatabaseService();
   final _formKey = GlobalKey<FormState>();
   PartyModel? selectedPartyModel;
-  void selectParty(String selected) {
-    setState(() {
-      _selectedParty = selected;
-    });
-    selectedPartyModel =
-        partyModelMenu.firstWhere((element) => element.partyName == selected);
-  }
+  // void selectParty(String selected) {
+  //   setState(() {
+  //     _selectedParty = selected;
+  //   });
+  //   selectedPartyModel =
+  //       partyModelMenu.firstWhere((element) => element.partyName == selected);
+  //   print("here");
+  //   print(selectedPartyModel);
+  //   // selectedPartyModel
+  // }
 
   void selectTax(String selected) {
     setState(() {
@@ -108,17 +111,17 @@ class _AddPurchaseState extends State<AddPurchase> {
     selectedInvoiceDate = selected;
   }
 
-  ItemModel? selectedItemModel;
+  late ItemModel selectedItemModel;
 
-  void selectItem(String selected) {
+  void selectItem(ItemModel selected) {
     setState(() {
       isLoading = true;
     });
-    selectedItemModel =
-        itemModelMenu.firstWhere((element) => element.itemId == selected);
-    _selectedItem = selectedItemModel!.itemName;
+    // selectedItemModel =
+    //     itemModelMenu.firstWhere((element) => element.itemId == selected);
+    _selectedItem = selected.itemName;
 
-    calcualateQty(selectedItemModel!);
+    calcualateQty(selectedItemModel);
   }
 
   double cgst = 0;
@@ -134,10 +137,11 @@ class _AddPurchaseState extends State<AddPurchase> {
 
     double taxInRupee =
         double.tryParse(_selectedTax!)! * 0.01 * asd; // tax in rupees
-    cgst = sgst = taxInRupee / 2;
+    cgst = sgst = double.tryParse((taxInRupee / 2).toStringAsFixed(2))!;
 
     asd = asd + taxInRupee;
-    totalController.text = asd.toString();
+
+    totalController.text = asd.toStringAsFixed(2);
     setState(() {
       isLoading = false;
     });
@@ -167,6 +171,7 @@ class _AddPurchaseState extends State<AddPurchase> {
   saveItem() async {
     InvoiceItemsModel invoiceItem = InvoiceItemsModel(
         item: selectedItemModel,
+        itemId: selectedItemModel.itemId,
         uom: _selectedUOM,
         quantity: double.tryParse(quantityController.text),
         unitPrice: double.tryParse(unitPriceController.text),
@@ -179,6 +184,7 @@ class _AddPurchaseState extends State<AddPurchase> {
     // PurchaseModel purchase = PurchaseModel(invoiceNo: invoiceNoController.text, invoiceId: invoiceId)
 
     invoiceItemsController.addItemToInvoice(invoiceItem);
+
     await showModalBottomSheet(
       isScrollControlled: true,
       // isDismissible: true,
@@ -207,9 +213,9 @@ class _AddPurchaseState extends State<AddPurchase> {
 
   loadData() async {
     partyMenu =
-        await partyController.allParties.map((e) => e.partyName).toList();
+        await partyController.allParties.map((e) => e.partyName!).toList();
     partyModelMenu = await partyController.allParties.map((e) => e).toList();
-    itemMenu = itemController.allItems.map((e) => e.itemName!).toList();
+    itemMenu = itemController.allItems.map((e) => e.itemName).toList();
     itemModelMenu = itemController.allItems.map((e) => e).toList();
     selectedInvoiceDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
@@ -435,12 +441,12 @@ class _AddPurchaseState extends State<AddPurchase> {
                                     return ListTile(
                                       tileColor: Colors.white,
                                       // leading: Icon(Icons.shopping_cart),
-                                      title: Text(party.partyName),
+                                      title: Text(party.partyName!),
                                       // subtitle: Text('\$${suggestion['price']}'),
                                     );
                                   },
                                   onSuggestionSelected: (PartyModel party) {
-                                    print(party.partyName);
+                                    print(party);
                                     _selectedParty = party.partyName;
                                     selectedPartyModel = party;
                                     // Navigator.of(context).push(MaterialPageRoute(
@@ -509,7 +515,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                                     return ListTile(
                                       tileColor: Colors.white,
                                       // leading: Icon(Icons.shopping_cart),
-                                      title: Text(product.itemName!),
+                                      title: Text(product.itemName),
                                       // subtitle: Text('\$${suggestion['price']}'),
                                     );
                                   },
@@ -517,8 +523,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                                     print(product.itemName);
                                     _selectedItem = product.itemName;
                                     selectedItemModel = product;
-                                    print(selectedItemModel!.itemId);
-                                    selectItem(selectedItemModel!.itemId!);
+                                    selectItem(selectedItemModel);
                                     // Navigator.of(context).push(MaterialPageRoute(
                                     //     builder: (context) =>
                                     //         ViewProductPage(product: product)));
@@ -655,7 +660,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                     //       )
                     //     : Container(),
                     InkWell(
-                        onTap: () {
+                        onTap: () async {
                           if (invoiceNoController.text.isEmpty) {
                             Flushbar(
                               title: "Oops!!",
@@ -677,8 +682,9 @@ class _AddPurchaseState extends State<AddPurchase> {
                               duration: const Duration(seconds: 2),
                               backgroundColor: Colors.red[800]!,
                             )..show(context);
-                          } else
+                          } else {
                             saveItem();
+                          }
                           // if (widget.productId == '')
                           //   saveProduct(productImage1, productController.text);
                           // else

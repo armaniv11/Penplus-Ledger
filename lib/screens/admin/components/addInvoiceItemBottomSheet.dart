@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:another_flushbar/flushbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -8,18 +11,19 @@ import 'package:penon/controllers/invoiceItemsController.dart';
 import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/database/database.dart';
 import 'package:penon/models/invoice_items_model.dart';
+import 'package:penon/models/ledger_model.dart';
 import 'package:penon/models/party_model.dart';
 import 'package:penon/models/purchase_model.dart';
 import 'package:penon/screens/admin/components/invoice_items_grid.dart';
 import 'package:random_string/random_string.dart';
 
 class AddInvoiceItemBottomSheet extends StatefulWidget {
-  final PartyModel? partyName;
+  final PartyModel partyName;
   final String? invoiceNo;
   final invoiceDate;
 
   const AddInvoiceItemBottomSheet(
-      {Key? key, this.partyName, this.invoiceNo, this.invoiceDate})
+      {Key? key, required this.partyName, this.invoiceNo, this.invoiceDate})
       : super(key: key);
   // final ValueChanged<bool> callback;
 
@@ -38,29 +42,78 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   List<dynamic> asd = [];
+  var db = FirebaseFirestore.instance;
+//Create a batch
 
   savePurchase() async {
-    // invoiceItemsController.invoiceItems.forEach((element) {
-    //   asd.add(element.toJson());
+    setState(() {
+      isLoading = true;
+    });
+    var batch = db.batch();
+    List<dynamic> asd = [];
+    invoiceItemsController.invoiceItems.forEach((element) {
+      asd.add(element.toJson());
+    });
+    print(widget.partyName.mob1);
+    // List<InvoiceItemsModel> asdf = <InvoiceItemsModel>[];
+
+    // PartyModel par = PartyModel(partyName: 'asdff', companyId: '12');
     // });
     PurchaseModel purchase = PurchaseModel(
-        partyName: widget.partyName?.partyName,
-        invoiceDate: widget.invoiceDate,
+        party: widget.partyName,
+        invoiceDate: DateTime.parse(widget.invoiceDate),
         invoiceItems: invoiceItemsController.invoiceItems,
         invoiceNo: widget.invoiceNo,
         invoiceId: randomAlphaNumeric(6),
         createdAt: DateTime.now(),
-        cashDiscount: double.tryParse(discountController.text),
-        paidAmount: double.tryParse(paidController.text),
-        dueAmount: double.tryParse(dueController.text),
+        grandTotal: double.tryParse(invoiceItemsController.totalAfterDeduction),
+        cashDiscount: double.tryParse(discountController.text) ?? 0,
+        paidAmount: double.tryParse(paidController.text) ?? 0,
+        dueAmount: double.tryParse(dueController.text) ?? 0,
         companyId: '8874030006');
-    databaseService.addPurchase(purchase: purchase).then((value) {
+    print(purchase.toJson());
+    // var ssdd = jsonEncode(purchase);
+    // print(purchase.partyName.mob1);
+    // await databaseService.addPurchase(purchase: purchase);
+    LedgerModel ledgerCredit = LedgerModel(
+        ledgerId: randomAlphaNumeric(6),
+        partyId: widget.partyName,
+        creditAmount: double.tryParse(paidController.text) ?? 0,
+        debitAmount: 0,
+        transactionType: "PURCHASE",
+        createdAt: DateTime.now());
+    LedgerModel ledgerDebit = LedgerModel(
+        ledgerId: randomAlphaNumeric(6),
+        partyId: widget.partyName,
+        creditAmount: 0,
+        debitAmount:
+            double.tryParse(invoiceItemsController.totalAfterDeduction)!,
+        transactionType: "PURCHASE");
+    batch.set(
+      db.collection('Purchase').doc(purchase.invoiceId),
+      purchase.toJson(),
+    );
+    batch.set(
+      db.collection('Ledger').doc(ledgerCredit.ledgerId),
+      ledgerCredit.toJson(),
+    );
+    batch.set(
+      FirebaseFirestore.instance.collection('Ledger').doc(ledgerDebit.ledgerId),
+      ledgerDebit.toJson(),
+    );
+    batch.commit().then((value) {
       return Flushbar(
         title: "Success",
-        message: "Purchase Invoice created Successfully",
-        duration: Duration(seconds: 3),
-      )..show(context);
+        message: "Purchase Invoice created Successfully!!",
+        duration: Duration(seconds: 2),
+      )..show(context).then((value) {
+          setState(() {
+            isLoading = false;
+          });
+        });
     });
+
+    // });
   }
 
   @override

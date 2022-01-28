@@ -7,9 +7,9 @@ part of 'item_model.dart';
 // **************************************************************************
 
 ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => ItemModel(
-      itemName: json['itemName'] as String?,
+      itemName: json['itemName'] as String,
       itemHSN: json['itemHSN'] as String?,
-      itemId: json['itemId'] as String?,
+      itemId: json['itemId'] as String,
       gst: json['gst'] as int?,
       gstInSP: json['gstInSP'] as bool?,
       purchasePrice: (json['purchasePrice'] as num?)?.toDouble() ?? 0,
@@ -24,6 +24,7 @@ ItemModel _$ItemModelFromJson(Map<String, dynamic> json) => ItemModel(
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
+      isDeleted: json['isDeleted'] as bool? ?? false,
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
@@ -44,6 +45,7 @@ Map<String, dynamic> _$ItemModelToJson(ItemModel instance) => <String, dynamic>{
       'rentAmt': instance.rentAmt,
       'securityAmt': instance.securityAmt,
       'companyId': instance.companyId,
+      'isDeleted': instance.isDeleted,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
     };

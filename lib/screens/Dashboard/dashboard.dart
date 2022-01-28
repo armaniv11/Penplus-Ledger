@@ -3,6 +3,7 @@ import 'package:penon/screens/admin/add_party.dart';
 import 'package:penon/screens/admin/add_product.dart';
 import 'package:penon/screens/admin/add_purchase.dart';
 import 'package:penon/screens/admin/company_info.dart';
+import 'package:penon/screens/registers/purchase_register.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -41,7 +42,15 @@ class _DashboardState extends State<Dashboard> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => AddPurchase()));
               },
-              child: Text("New Purchase"))
+              child: Text("New Purchase")),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PurchaseRegister()));
+              },
+              child: Text("Purchase Register"))
         ],
       ),
     );

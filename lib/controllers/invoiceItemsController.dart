@@ -34,12 +34,12 @@ class InvoiceItemsController extends GetxController {
   }
 
   // this add invoice Item to Invoice
-  addItemToInvoice(InvoiceItemsModel item) async {
+  addItemToInvoice(InvoiceItemsModel item) {
     // String msg = "${product.name} added to Cart !";
     //   cartItems.add(items);
-    int itemIndex = invoiceItems
-        .indexWhere((element) => element.item!.itemId == item.item!.itemId);
-    print(item.item!.itemId);
+    int itemIndex =
+        invoiceItems.indexWhere((element) => element.itemId == item.itemId);
+    // print(item.itemId);
     print(itemIndex);
     if (itemIndex == -1) {
       print("Match");

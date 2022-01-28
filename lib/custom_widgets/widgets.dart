@@ -327,7 +327,7 @@ Widget containerText(String text) {
       ));
 }
 
-customCircularIcon(Color bgcolor, Color iconColor, IconData icon,
+Widget customCircularIcon(Color bgcolor, Color iconColor, IconData icon,
     {double size: 22}) {
   return Padding(
     padding: const EdgeInsets.only(right: 8),

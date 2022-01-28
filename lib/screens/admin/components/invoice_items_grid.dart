@@ -45,7 +45,7 @@ class _InvoiceItemGridState extends State<InvoiceItemGrid> {
                         child: Text("${widget.index}")),
                     Padding(
                         padding: const EdgeInsets.only(left: 8),
-                        child: Text(widget.invoiceItem.item!.itemName!,
+                        child: Text(widget.invoiceItem.item.itemName,
                             style: GoogleFonts.poppins(
                                 color: Colors.black, fontSize: 20))),
                     Spacer(),

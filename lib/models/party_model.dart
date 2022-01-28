@@ -4,7 +4,7 @@ part 'party_model.g.dart';
 
 @JsonSerializable()
 class PartyModel {
-  String partyName;
+  String? partyName;
   String? address;
   String? pid;
   String? gstType;
@@ -22,10 +22,10 @@ class PartyModel {
   DateTime? updatedAt;
 
   PartyModel(
-      {required this.partyName,
-      this.address,
-      this.gstType,
-      this.gstNo,
+      {this.partyName,
+      this.address = '',
+      this.gstType = 'Unregistered',
+      this.gstNo = '',
       this.pid,
       this.state,
       this.mob1,
@@ -55,6 +55,10 @@ class PartyModel {
   //     createdAt: doc['createdAt'], // just incude the firebase import
   //   );
   // }
+  @override
+  String toString() {
+    return 'Student: {name: $partyName, gstType: $gstType}';
+  }
 }
 
 class TimestampConvertDatetime implements JsonConverter<DateTime, Timestamp> {

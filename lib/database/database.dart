@@ -159,10 +159,20 @@ class DatabaseService {
     // pur['invoiceId'] = FieldValue.increment(1);
     await FirebaseFirestore.instance
         .collection('Purchase')
-        .doc(purchase.invoiceId)
+        .doc("purchase.invoiceId")
         .set(
           purchase.toJson(),
         );
+  }
+
+  Future<List<PurchaseModel>> loadPurchaseRegister() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('Purchase')
+        .where('companyId', isEqualTo: '8874030006')
+        .get();
+    return querySnapshot.docs
+        .map((e) => PurchaseModel.fromJson(e.data() as Map<String, dynamic>))
+        .toList();
   }
 
   Future newProduct(

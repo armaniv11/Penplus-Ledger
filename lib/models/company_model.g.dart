@@ -22,6 +22,7 @@ CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel(
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
+      isDeleted: json['isDeleted'] as bool? ?? false,
       session: json['session'] as String? ?? '2021-22',
     );
 
@@ -37,6 +38,7 @@ Map<String, dynamic> _$CompanyModelToJson(CompanyModel instance) =>
       'gstNo': instance.gstNo,
       'website': instance.website,
       'session': instance.session,
+      'isDeleted': instance.isDeleted,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
     };

@@ -1,8 +1,4 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:penon/models/item_model.dart';
 import 'package:penon/models/party_model.dart';
@@ -28,7 +24,7 @@ Future<List<ItemModel>> searchItem(
   products.forEach((element) {
     print(element.itemName);
     print(searchText);
-    if (element.itemName!.contains(searchText)) {
+    if (element.itemName.contains(searchText)) {
       print(element.itemName);
       print("found");
       asd.add(element);
@@ -43,7 +39,7 @@ Future<List<PartyModel>> searchParty(
   products.forEach((element) {
     // print(element.itemName);
     print(searchText);
-    if (element.partyName.contains(searchText)) {
+    if (element.partyName!.contains(searchText)) {
       print(element.partyName);
       print("found");
       asd.add(element);

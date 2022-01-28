@@ -4,9 +4,9 @@ part 'item_model.g.dart';
 
 @JsonSerializable()
 class ItemModel {
-  String? itemName;
+  String itemName;
   String? itemHSN;
-  String? itemId;
+  String itemId;
   int? gst;
   bool? gstInSP;
   double? purchasePrice;
@@ -25,9 +25,9 @@ class ItemModel {
   DateTime? updatedAt;
 
   ItemModel(
-      {this.itemName,
+      {required this.itemName,
       this.itemHSN,
-      this.itemId,
+      required this.itemId,
       this.gst,
       this.gstInSP,
       this.purchasePrice = 0,

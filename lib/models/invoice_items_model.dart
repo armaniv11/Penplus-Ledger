@@ -5,8 +5,8 @@ part 'invoice_items_model.g.dart';
 
 @JsonSerializable()
 class InvoiceItemsModel {
-  ItemModel? item;
-
+  ItemModel item;
+  String itemId;
   String? uom;
   double? quantity;
   double? unitPrice;
@@ -18,8 +18,9 @@ class InvoiceItemsModel {
   double? cess;
 
   InvoiceItemsModel({
-    this.item,
+    required this.item,
     this.uom = 'Pcs',
+    required this.itemId,
     this.quantity = 1,
     this.unitPrice = 0,
     this.total = 0,
@@ -50,17 +51,4 @@ class InvoiceItemsModel {
   // //     createdAt: doc['createdAt'], // just incude the firebase import
   // //   );
   // // }
-}
-
-class TimestampConvertDatetime implements JsonConverter<DateTime, Timestamp> {
-  const TimestampConvertDatetime();
-  @override
-  DateTime fromJson(Timestamp json) {
-    return json.toDate();
-  }
-
-  @override
-  Timestamp toJson(DateTime object) {
-    return Timestamp.fromDate(object);
-  }
 }

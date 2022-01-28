@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:penon/models/invoice_items_model.dart';
+import 'package:penon/models/party_model.dart';
 part 'purchase_model.g.dart';
 
 @JsonSerializable()
 class PurchaseModel {
-  String? partyName;
+  PartyModel party;
   String? invoiceNo;
   @TimestampConvertDatetime()
   DateTime? invoiceDate;
@@ -18,14 +19,14 @@ class PurchaseModel {
   String invoiceId;
   String? companyId;
   bool isDeleted;
-  List<InvoiceItemsModel>? invoiceItems;
+  List<InvoiceItemsModel> invoiceItems;
   @TimestampConvertDatetime()
   DateTime? createdAt;
   @TimestampConvertDatetime()
   DateTime? updatedAt;
 
   PurchaseModel(
-      {this.partyName,
+      {required this.party,
       this.invoiceDate,
       required this.invoiceNo,
       this.cashDiscount = 0,
@@ -35,7 +36,7 @@ class PurchaseModel {
       required this.invoiceId,
       this.createdAt,
       this.companyId,
-      this.invoiceItems,
+      required this.invoiceItems,
       this.isDeleted = false,
       this.updatedAt});
 
@@ -47,14 +48,15 @@ class PurchaseModel {
   //   List<InvoiceItemsModel> invoiceItems =
   //       list.map((i) => InvoiceItemsModel.fromJson(i)).toList();
   //   return PurchaseModel(
-  //       partyName: json['partyName'] as String,
+  //       party: json['partyName'] ?? {},
   //       invoiceNo: json['invoiceNo'] as String,
   //       invoiceId: json['invoiceId'] as String,
   //       cashDiscount: (json['cashDiscount'] as num?)?.toDouble() ?? 0,
   //       grandTotal: (json['grandTotal'] as num?)?.toDouble() ?? 0,
   //       paidAmount: (json['paidAmount'] as num?)?.toDouble() ?? 0,
   //       dueAmount: (json['dueAmount'] as num?)?.toDouble() ?? 0,
-  //       invoiceItems: invoiceItems);
+  //       invoiceItems: invoiceItems,
+  //       companyId: json['companyId'] as String);
   // }
 
   Map<String, dynamic> toJson() => _$PurchaseModelToJson(this);

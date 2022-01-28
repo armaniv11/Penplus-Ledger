@@ -7,16 +7,17 @@ part of 'party_model.dart';
 // **************************************************************************
 
 PartyModel _$PartyModelFromJson(Map<String, dynamic> json) => PartyModel(
-      partyName: json['partyName'] as String,
-      address: json['address'] as String?,
-      gstType: json['gstType'] as String?,
-      gstNo: json['gstNo'] as String?,
+      partyName: json['partyName'] as String?,
+      address: json['address'] as String? ?? '',
+      gstType: json['gstType'] as String? ?? 'Unregistered',
+      gstNo: json['gstNo'] as String? ?? '',
       pid: json['pid'] as String?,
       state: json['state'] as String?,
       mob1: json['mob1'] as String?,
       email: json['email'] as String?,
       openingBal: json['openingBal'] as String?,
       openingType: json['openingType'] as String?,
+      isDeleted: json['isDeleted'] as bool? ?? false,
       companyId: json['companyId'] as String,
     )
       ..createdAt = json['createdAt'] == null
@@ -39,6 +40,7 @@ Map<String, dynamic> _$PartyModelToJson(PartyModel instance) =>
       'openingBal': instance.openingBal,
       'openingType': instance.openingType,
       'companyId': instance.companyId,
+      'isDeleted': instance.isDeleted,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
     };
