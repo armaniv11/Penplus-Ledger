@@ -88,6 +88,7 @@ customButton(buttonName,
     double fontsize: 18,
     double padding: 8,
     icon: null,
+    IconData iconData: Icons.arrow_forward,
     Color iconColor: Colors.white}) {
   return Padding(
     padding: EdgeInsets.all(padding),
@@ -115,7 +116,7 @@ customButton(buttonName,
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Icon(
-                      Icons.arrow_forward,
+                      iconData,
                       color: iconColor,
                     ),
                   )
@@ -248,14 +249,15 @@ Widget customTextFormFieldWithoutHeading(
 Widget iconWithText(IconData iconname, double iconsize, String name,
     {Color color: Colors.black,
     double fontsize: 18,
-    TextDecoration textDecoration: TextDecoration.none}) {
+    TextDecoration textDecoration: TextDecoration.none,
+    FontWeight fontWeight: FontWeight.w900}) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
       Padding(
         padding: const EdgeInsets.only(top: 5, right: 2),
-        child: FaIcon(
+        child: Icon(
           iconname,
           size: iconsize,
           color: Colors.grey,
@@ -267,7 +269,7 @@ Widget iconWithText(IconData iconname, double iconsize, String name,
             decoration: textDecoration,
             fontSize: fontsize,
             color: color,
-            fontWeight: FontWeight.w900,
+            fontWeight: fontWeight,
             letterSpacing: 1),
       )
     ],

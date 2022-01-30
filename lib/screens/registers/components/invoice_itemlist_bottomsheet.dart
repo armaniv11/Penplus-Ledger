@@ -15,18 +15,18 @@ import 'package:penon/models/invoice_items_model.dart';
 import 'package:penon/models/ledger_model.dart';
 import 'package:penon/models/party_model.dart';
 import 'package:penon/models/purchase_model.dart';
+import 'package:penon/models/sale_model.dart';
 import 'package:penon/screens/admin/components/invoice_items_grid.dart';
 import 'package:random_string/random_string.dart';
 
 class InvoiceItemListBottomSheet extends StatelessWidget {
-  final PurchaseModel invoice;
+  final invoice;
   const InvoiceItemListBottomSheet({Key? key, required this.invoice})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<InvoiceItemsModel> invoiceItems =
-        invoice.invoiceItems.map((e) => e).toList();
+    List invoiceItems = invoice.invoiceItems.map((e) => e).toList();
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.only(
@@ -35,7 +35,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
         // padding: EdgeInsets.only(top: 6),
         // height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
-            color: Colors.blueGrey[100],
+            color: Colors.white,
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(24), topLeft: Radius.circular(24))),
         child:
@@ -48,7 +48,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(top: 6, bottom: 6),
               decoration: BoxDecoration(
-                  color: Colors.grey[600],
+                  color: Colors.white,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),
@@ -67,14 +67,14 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
-                          color: Colors.white),
+                          color: Colors.black),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   Text(
                     " (${invoiceItems.length})",
                     style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.grey,
                         // fontSize: 30,
                         fontWeight: FontWeight.bold),
                   ),
@@ -87,7 +87,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 10),
                       child: Icon(
                         Icons.close,
-                        color: Colors.white,
+                        color: Colors.grey,
                       ),
                     ),
                   ),
@@ -228,11 +228,13 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
                               // saveSubCategory();
                               // savePurchase();
                             },
-                            child: customButton("Add",
+                            child: customButton("Delete Invoice",
                                 width: size.width / 2.1,
-                                backgroundColor: Colors.yellow,
+                                backgroundColor: Colors.red,
                                 padding: 4,
-                                containerHeight: 50)),
+                                containerHeight: 50,
+                                iconData: Icons.delete_outline_outlined,
+                                icon: Icons.delete)),
                       ),
                     ],
                   )

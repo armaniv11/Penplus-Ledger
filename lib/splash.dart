@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:penon/appconstants.dart';
 import 'package:penon/controllers/itemController.dart';
 import 'package:penon/screens/Dashboard/dashboard.dart';
 import 'package:penon/screens/auth/register_page_phone.dart';
@@ -84,8 +86,7 @@ class _SplashState extends State<Splash> {
     super.initState();
     //getData();
     _checklogin().then((value) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Dashboard()));
+      checkUserLoggedInStatus();
       // checkInfo();
     });
     // _checklogin().then((status) {
@@ -99,19 +100,16 @@ class _SplashState extends State<Splash> {
 
   bool blocked = false;
   bool isLoggedIn = false;
-  // checkUserLoggedInStatus() async {
-  //   HelperFunctions.getUserLoggedInDetails().then((value) {
-  //     print("check");
-  //     print(value);
-  //     if (value == true) {
-  //       Navigator.pushReplacement(
-  //           context, MaterialPageRoute(builder: (context) => Home()));
-  //     } else {
-  //       Navigator.pushReplacement(
-  //           context, MaterialPageRoute(builder: (context) => SignInPage()));
-  //     }
-  //   });
-  // }
+  final box = GetStorage();
+  checkUserLoggedInStatus() async {
+    if (box.read('isloggedin') == true) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Dashboard()));
+    } else {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => RegisterPagePhone()));
+    }
+  }
 
   //String name;
 
@@ -131,7 +129,7 @@ class _SplashState extends State<Splash> {
                 baseColor: Colors.grey,
                 highlightColor: Colors.white,
                 child: Text(
-                  "PENON",
+                  AppConstants.appName,
                   style: GoogleFonts.actor(
                       color: Colors.grey,
                       fontSize: 26,

@@ -4,7 +4,7 @@ part 'company_model.g.dart';
 
 @JsonSerializable()
 class CompanyModel {
-  String? firmName;
+  String firmName;
   String? firmAddress;
   String? state;
   String? emailID;
@@ -14,14 +14,16 @@ class CompanyModel {
   String? gstNo;
   String? website;
   String? session;
+  List? permissions;
   bool isDeleted;
+  int saleInvoiceCount;
   @TimestampConvertDatetime()
   DateTime? createdAt;
   @TimestampConvertDatetime()
   DateTime? updatedAt;
 
   CompanyModel(
-      {this.firmName,
+      {this.firmName = '',
       this.firmAddress,
       this.state,
       this.emailID,
@@ -33,6 +35,8 @@ class CompanyModel {
       this.createdAt,
       this.updatedAt,
       this.isDeleted = false,
+      this.permissions,
+      this.saleInvoiceCount = 0,
       this.session = '2021-22'});
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) =>
@@ -41,20 +45,25 @@ class CompanyModel {
   Map<String, dynamic> toJson() => _$CompanyModelToJson(this);
 
   factory CompanyModel.fromDoc(DocumentSnapshot doc) {
+    Map<String, dynamic> json = doc.data() as Map<String, dynamic>;
     return CompanyModel(
         // Extra fields
-        firmName: doc["firmName"],
-        firmAddress: doc['firmAddress'],
-        state: doc['state'],
-        emailID: doc['emailID'],
-        mob1: doc['mob1'],
-        mob2: doc['mob2'],
-        gstType: doc['gstType'],
-        gstNo: doc['gstNo'],
-        website: doc['website'],
-        createdAt: doc['createdAt'],
-        session: doc['session'] ?? "2021-22" // just incude the firebase import
-        );
+        firmName: json['firmName'],
+        firmAddress: json['firmAddress'],
+        state: json['state'],
+        emailID: json['emailID'],
+        mob1: json['mob1'], //this is the company Id
+        mob2: json['mob2'],
+        gstType: json['gstType'],
+        gstNo: json['gstNo'],
+        website: json['website'],
+        createdAt: DateTime.parse(json['createdAt'] as String),
+        session:
+            json['session'] ?? '2021-22', // just incude the firebase import,
+        isDeleted: json['isDeleted'] ?? false,
+        permissions: json['permissions'],
+        saleInvoiceCount: json['saleInvoiceCount'] ?? 0,
+        updatedAt: DateTime.parse(json['createdAt'] as String));
   }
 }
 

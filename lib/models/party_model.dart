@@ -12,7 +12,7 @@ class PartyModel {
   String? state;
   String? mob1;
   String? email;
-  String? openingBal;
+  double? openingBal;
   String? openingType;
   String companyId;
   bool isDeleted;
@@ -27,11 +27,11 @@ class PartyModel {
       this.gstType = 'Unregistered',
       this.gstNo = '',
       this.pid,
-      this.state,
+      this.state = "Uttar Pradesh(09)",
       this.mob1,
       this.email,
-      this.openingBal,
-      this.openingType,
+      this.openingBal = 0,
+      this.openingType = 'Pay',
       this.isDeleted = false,
       required this.companyId});
 

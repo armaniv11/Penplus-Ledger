@@ -1,18 +1,16 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'purchase_model.dart';
+part of 'sale_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PurchaseModel _$PurchaseModelFromJson(Map<String, dynamic> json) =>
-    PurchaseModel(
+SaleModel _$SaleModelFromJson(Map<String, dynamic> json) => SaleModel(
       party: PartyModel.fromJson(json['party'] as Map<String, dynamic>),
-      invoiceDate: json['invoiceDate'] == null
-          ? null
-          : DateTime.parse(json['invoiceDate'] as String),
-      invoiceNo: json['invoiceNo'] as String?,
+      invoiceDate: const TimestampConvertDatetime()
+          .fromJson(json['invoiceDate'] as Timestamp),
+      invoiceNo: json['invoiceNo'] as String,
       cashDiscount: (json['cashDiscount'] as num?)?.toDouble() ?? 0,
       grandTotal: (json['grandTotal'] as num?)?.toDouble() ?? 0,
       paidAmount: (json['paidAmount'] as num?)?.toDouble() ?? 0,
@@ -31,13 +29,13 @@ PurchaseModel _$PurchaseModelFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['updatedAt'] as String),
     );
 
-Map<String, dynamic> _$PurchaseModelToJson(PurchaseModel instance) {
+Map<String, dynamic> _$SaleModelToJson(SaleModel instance) {
   var asd = instance.invoiceItems.map((e) => e.toJson()).toList();
-
   return <String, dynamic>{
     'party': instance.party.toJson(),
     'invoiceNo': instance.invoiceNo,
-    'invoiceDate': instance.invoiceDate?.toIso8601String(),
+    'invoiceDate':
+        const TimestampConvertDatetime().toJson(instance.invoiceDate),
     'cashDiscount': instance.cashDiscount,
     'grandTotal': instance.grandTotal,
     'paidAmount': instance.paidAmount,
@@ -50,5 +48,3 @@ Map<String, dynamic> _$PurchaseModelToJson(PurchaseModel instance) {
     'updatedAt': instance.updatedAt?.toIso8601String(),
   };
 }
-  //   var asd = instance.invoiceItems.map((e) => e.toJson()).toList();
-

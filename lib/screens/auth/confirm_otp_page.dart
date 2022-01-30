@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
   Color accentPurpleColor = const Color(0xFF6A53A1);
   Color primaryColor = Color(0xFF121212);
   Color accentPinkColor = Color(0xFFF99BBD);
-  Color accentDarkGreenColor = Color(0xFF115C49);
+  Color accentDarkGreenColor = Colors.white;
   Color accentYellowColor = Color(0xFFFFB612);
   Color accentOrangeColor = Color(0xFFEA7A3B);
   late List<TextStyle> otpTextStyles;
@@ -84,17 +85,18 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
       final User user = _auth.currentUser!;
       print(user.uid);
       print("checking");
-      GetStorage().write('isLoggedIn', true);
+      GetStorage().write('isloggedin', true);
       GetStorage().write('userid', user.uid);
       GetStorage().write('mob', widget.phoneNo);
+      await checkAccountExists(widget.phoneNo);
 
       // await databaseService.createProfile(widget.phoneNo).then((value) {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AddCompany(
-                    mob: widget.phoneNo,
-                  )));
+      // Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => AddCompany(
+      //               mob: widget.phoneNo,
+      //             )));
       // });
 
       // HelperFunctions.saveUserLoggedInStatus(
@@ -105,6 +107,26 @@ class _ConfirmOtpPageState extends State<ConfirmOtpPage> {
       isLoading = false;
     });
     print("verifying");
+  }
+
+  checkAccountExists(mob) async {
+    FirebaseFirestore.instance
+        .collection('Company')
+        .doc(mob)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const Dashboard()));
+      } else {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AddCompany(
+                      mob: widget.phoneNo,
+                    )));
+      }
+    });
   }
 
   String? phone;

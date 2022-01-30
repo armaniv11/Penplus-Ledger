@@ -1,34 +1,29 @@
 import 'dart:io';
 
-import 'package:another_flushbar/flushbar.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:penon/appconstants.dart';
+
 import 'package:penon/controllers/partyController.dart';
-import 'package:penon/custom_classes/custom_classes.dart';
-import 'package:penon/custom_widgets/widgets.dart';
+
 import 'package:penon/database/database.dart';
-import 'package:penon/models/item_model.dart';
-import 'package:penon/models/party_model.dart';
 import 'package:penon/models/purchase_model.dart';
+import 'package:penon/models/sale_model.dart';
 import 'package:penon/screens/registers/components/listview_register.dart';
 import 'package:random_string/random_string.dart';
 
-class PurchaseRegister extends StatefulWidget {
-  const PurchaseRegister({
+class SaleRegister extends StatefulWidget {
+  const SaleRegister({
     Key? key,
   }) : super(key: key);
 
   @override
-  _PurchaseRegisterState createState() => _PurchaseRegisterState();
+  _SaleRegisterState createState() => _SaleRegisterState();
 }
 
-class _PurchaseRegisterState extends State<PurchaseRegister> {
+class _SaleRegisterState extends State<SaleRegister> {
   final PartyController partyController = Get.find();
   // TextEditingController partyNameController = TextEditingController();
   // TextEditingController gstNoController = TextEditingController();
@@ -43,7 +38,7 @@ class _PurchaseRegisterState extends State<PurchaseRegister> {
   DatabaseService databaseService = DatabaseService();
 
   final _formKey = GlobalKey<FormState>();
-  List<PurchaseModel> purchaseRegister = [];
+  List<SaleModel> SaleRegister = [];
 
   @override
   void initState() {
@@ -53,9 +48,9 @@ class _PurchaseRegisterState extends State<PurchaseRegister> {
   }
 
   loadData() async {
-    databaseService.loadPurchaseRegister().then((value) {
-      purchaseRegister = value;
-      purchaseRegister.forEach((element) {
+    databaseService.loadSaleRegister().then((value) {
+      SaleRegister = value;
+      SaleRegister.forEach((element) {
         print(element.invoiceNo);
       });
       setState(() {
@@ -78,16 +73,16 @@ class _PurchaseRegisterState extends State<PurchaseRegister> {
         // backgroundColor: Colors.pink.withOpacity(0.7),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: const Text("Purchase Register"),
+          title: const Text("Sale Register"),
           elevation: 0,
         ),
         body: ModalProgressHUD(
             inAsyncCall: isLoading,
             child: ListView.builder(
-                itemCount: purchaseRegister.length,
+                itemCount: SaleRegister.length,
                 itemBuilder: (BuildContext context, index) {
                   return RegisterList(
-                    invoice: purchaseRegister[index],
+                    invoice: SaleRegister[index],
                     index: index + 1,
                   );
                 })),

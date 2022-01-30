@@ -1,5 +1,5 @@
 class AppConstants {
-  static String appName = 'PENON';
+  static String appName = 'PENPLUS';
   static List<String> gstType = ['Unregistered', 'Regular', "Composition"];
   static List<String> gstMenu = [
     '0',

@@ -141,7 +141,7 @@ class _AddPartyState extends State<AddParty> {
           state: _selectedState,
           email: emailController.text,
           mob1: mobController.text,
-          openingBal: openingBalanceController.text,
+          openingBal: double.tryParse(openingBalanceController.text) ?? 0,
           openingType: _selectedOpening);
 
       await databaseService.addParty(partyDetails: party).then((value) {
@@ -270,7 +270,7 @@ class _AddPartyState extends State<AddParty> {
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover)),
+              image: AssetImage('assets/images/bg.jpg'), fit: BoxFit.cover)),
       child: Container(
         decoration: BoxDecoration(color: Colors.blue.withOpacity(0.5)),
         child: Scaffold(

@@ -15,6 +15,7 @@ import 'package:penon/custom_classes/custom_classes.dart';
 import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/database/database.dart';
 import 'package:penon/models/company_model.dart';
+import 'package:penon/screens/Dashboard/dashboard.dart';
 
 class AddCompany extends StatefulWidget {
   final String? mob;
@@ -155,30 +156,39 @@ class _AddCompanyState extends State<AddCompany> {
       // salePriceController.text.isEmpty || salePriceController.text == '0'
       //     ? salePriceController.text = priceController.text
       //     : null;
+      final CompanyModel company = CompanyModel(
+          firmName: companyController.text,
+          firmAddress: addressController.text,
+          state: _selectedState,
+          emailID: emailController.text,
+          mob1: mob1Controller.text,
+          mob2: mob2Controller.text,
+          gstType: selectedGSTType,
+          gstNo: gstnoController.text,
+          website: websiteController.text,
+          createdAt: DateTime.now(),
+          saleInvoiceCount: 0,
+          isDeleted: false,
+          permissions: [],
+          session: selectedSession);
 
       await databaseService
-          .addCompany(
-              companyDetails: CompanyModel(
-                  firmName: companyController.text,
-                  firmAddress: addressController.text,
-                  state: _selectedState,
-                  emailID: emailController.text,
-                  mob1: mob1Controller.text,
-                  mob2: mob2Controller.text,
-                  gstType: selectedGSTType,
-                  gstNo: gstnoController.text,
-                  website: websiteController.text,
-                  createdAt: DateTime.now()))
+          .addCompany(companyDetails: company)
           .then((value) async {
-        await GetStorage()
-            .write(GetStorageConstants.companyId, companyController.text);
-        return Flushbar(
-          title: "Success!!",
-          message: "Company Information has been saved successfully!!",
-          duration: const Duration(seconds: 3),
-        )..show(context).then((value) {
-            Navigator.of(context).pop();
-          });
+        if (value != null) {
+          GetStorage().write('selfcompanyinfo', company.toJson());
+
+          await GetStorage()
+              .write(GetStorageConstants.companyId, companyController.text);
+          return Flushbar(
+            title: "Success!!",
+            message: "Company Information has been saved successfully!!",
+            duration: const Duration(seconds: 3),
+          )..show(context).then((value) {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const Dashboard()));
+            });
+        }
       });
     }
     setState(() {

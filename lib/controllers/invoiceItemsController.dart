@@ -66,4 +66,11 @@ class InvoiceItemsController extends GetxController {
   addPaidAmount(amt) {
     paidAmount.value = double.tryParse(amt)!;
   }
+
+  clearInvoiceItems() {
+    invoiceItems.clear();
+    cashDiscount.value = 0;
+    paidAmount.value = 0;
+    dueAmount.value = 0;
+  }
 }

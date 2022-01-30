@@ -14,7 +14,7 @@ class ItemController extends GetxController {
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
-    var items = GetStorage().read('allitems') ?? [] as List<ItemModel>;
+    var items = GetStorage().read('allitems') ?? <ItemModel>[];
     print(items.length);
     items.forEach((element) {
       allItems.add(ItemModel.fromJson(element));

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -17,23 +18,24 @@ import 'package:penon/custom_classes/custom_classes.dart';
 import 'package:penon/custom_functions/custom_functions.dart';
 import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/database/database.dart';
+import 'package:penon/models/company_model.dart';
 import 'package:penon/models/invoice_items_model.dart';
 import 'package:penon/models/item_model.dart';
 import 'package:penon/models/party_model.dart';
 import 'package:penon/models/purchase_model.dart';
+import 'package:penon/screens/shared/shared_functions.dart';
 import 'package:random_string/random_string.dart';
 
 import 'components/addInvoiceItemBottomSheet.dart';
 
-class AddPurchase extends StatefulWidget {
-  final String? productId;
-  const AddPurchase({Key? key, this.productId = ''}) : super(key: key);
+class AddSale extends StatefulWidget {
+  const AddSale({Key? key}) : super(key: key);
 
   @override
-  _AddPurchaseState createState() => _AddPurchaseState();
+  _AddSaleState createState() => _AddSaleState();
 }
 
-class _AddPurchaseState extends State<AddPurchase> {
+class _AddSaleState extends State<AddSale> {
   final ItemController itemController = Get.find();
   final PartyController partyController = Get.find();
   final InvoiceItemsController invoiceItemsController = Get.find();
@@ -53,6 +55,8 @@ class _AddPurchaseState extends State<AddPurchase> {
   String? _selectedUOM = "Pcs";
   String labelText = 'Add Item To Invoice';
   String? _selectedTax = '0';
+
+  late CompanyModel selfCompanyInfo;
 
   List<String> partyMenu = [];
   List<PartyModel> partyModelMenu = [];
@@ -152,7 +156,7 @@ class _AddPurchaseState extends State<AddPurchase> {
 // calculates when item from dorpdown changed
   calcualateQty(ItemModel item) async {
     print(item.itemDesc);
-    unitPriceController.text = item.purchasePrice.toString();
+    unitPriceController.text = item.sellPrice.toString();
 
     if (quantityController.text.isEmpty) {
       quantityController.text = '1';
@@ -211,6 +215,8 @@ class _AddPurchaseState extends State<AddPurchase> {
     // });
   }
 
+  final box = GetStorage();
+
   @override
   void initState() {
     invoiceItemsController.clearInvoiceItems();
@@ -228,6 +234,10 @@ class _AddPurchaseState extends State<AddPurchase> {
     itemMenu = itemController.allItems.map((e) => e.itemName).toList();
     itemModelMenu = itemController.allItems.map((e) => e).toList();
     selectedInvoiceDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    selfCompanyInfo = await SharedFunctions().getCompany();
+    invoiceNoController.text = selfCompanyInfo.session! +
+        ' / ' +
+        selfCompanyInfo.saleInvoiceCount.toString();
 
     setState(() {
       isLoading = false;
@@ -251,7 +261,7 @@ class _AddPurchaseState extends State<AddPurchase> {
         // backgroundColor: Colors.pink.withOpacity(0.7),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text("Purchase"),
+          title: Text("Sale"),
           elevation: 0,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -334,22 +344,48 @@ class _AddPurchaseState extends State<AddPurchase> {
                                         backgroundColor: Colors.grey))
                                 : InkWell(
                                     onTap: () async {
-                                      await showModalBottomSheet(
-                                        isScrollControlled: true,
-                                        // isDismissible: true,
-                                        context: context,
-                                        builder: (context) {
-                                          return AddInvoiceItemBottomSheet(
-                                            partyName: selectedPartyModel!,
-                                            invoiceNo: invoiceNoController.text,
-                                            invoiceDate: selectedInvoiceDate,
+                                      if (invoiceNoController.text.isEmpty) {
+                                        Flushbar(
+                                          title: "Oops!!",
+                                          message: "Provide Invoice No!!",
+                                          duration: const Duration(seconds: 2),
+                                          backgroundColor: Colors.red[800]!,
+                                        )..show(context);
+                                      } else if (selectedPartyController
+                                          .text.isEmpty) {
+                                        Flushbar(
+                                          title: "Oops!!",
+                                          message: "Please select a party!!",
+                                          duration: const Duration(seconds: 2),
+                                          backgroundColor: Colors.red[800]!,
+                                        )..show(context);
+                                      } else if (_selectedItem == null) {
+                                        Flushbar(
+                                          title: "Oops!!",
+                                          message: "Please select an Item!!",
+                                          duration: const Duration(seconds: 2),
+                                          backgroundColor: Colors.red[800]!,
+                                        )..show(context);
+                                      } else {
+                                        await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          // isDismissible: true,
+                                          context: context,
+                                          builder: (context) {
+                                            return AddInvoiceItemBottomSheet(
+                                              partyName: selectedPartyModel!,
+                                              invoiceNo:
+                                                  invoiceNoController.text,
+                                              invoiceDate: selectedInvoiceDate,
+                                              invoiceType: 'Sale',
 
-                                            // callback: changeCart,
-                                          );
-                                        },
-                                      ).then((value) {
-                                        // if (value != null) _addItem(value);
-                                      });
+                                              // callback: changeCart,
+                                            );
+                                          },
+                                        ).then((value) {
+                                          // if (value != null) _addItem(value);
+                                        });
+                                      }
                                     },
                                     child: customButton("view items",
                                         icon: Icons.arrow_forward,

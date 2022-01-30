@@ -3,8 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:penon/models/company_model.dart';
 import 'package:penon/models/item_model.dart';
+import 'package:penon/models/ledger_model.dart';
 import 'package:penon/models/party_model.dart';
 import 'package:penon/models/purchase_model.dart';
+import 'package:penon/models/sale_model.dart';
 // import 'package:jiffy/jiffy.dart';
 
 class DatabaseService {
@@ -128,6 +130,8 @@ class DatabaseService {
   }
 
   Future addCompany({required CompanyModel companyDetails}) async {
+    // Map<String, dynamic> asd = companyDetails.toJson();
+    // asd['saleInvoiceCount'] = FieldValue.increment(1);
     await FirebaseFirestore.instance
         .collection('Company')
         .doc(companyDetails.mob1)
@@ -172,6 +176,26 @@ class DatabaseService {
         .get();
     return querySnapshot.docs
         .map((e) => PurchaseModel.fromJson(e.data() as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<List<SaleModel>> loadSaleRegister() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('Sale')
+        .where('companyId', isEqualTo: '8874030006')
+        .get();
+    return querySnapshot.docs
+        .map((e) => SaleModel.fromJson(e.data() as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<List<LedgerModel>> loadLedger() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('Ledger')
+        .where('companyId', isEqualTo: '8874030006')
+        .get();
+    return querySnapshot.docs
+        .map((e) => LedgerModel.fromJson(e.data() as Map<String, dynamic>))
         .toList();
   }
 

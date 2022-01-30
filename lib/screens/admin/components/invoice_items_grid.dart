@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/models/invoice_items_model.dart';
 
 class InvoiceItemGrid extends StatefulWidget {
   final InvoiceItemsModel invoiceItem;
   final int index;
+  final bool isEditable;
   const InvoiceItemGrid(
-      {Key? key, required this.invoiceItem, required this.index})
+      {Key? key,
+      required this.invoiceItem,
+      required this.index,
+      this.isEditable = false})
       : super(key: key);
 
   @override
@@ -24,11 +29,11 @@ class _InvoiceItemGridState extends State<InvoiceItemGrid> {
         elevation: 8,
         borderRadius: BorderRadius.circular(8),
         child: Container(
-          padding: EdgeInsets.only(top: 8),
+          padding: EdgeInsets.only(top: 4),
           decoration: BoxDecoration(
               color: Colors.blue[100],
               border: Border.all(
-                color: Colors.grey[300]!,
+                color: Colors.white,
               ),
               borderRadius: BorderRadius.circular(8)),
           child: Column(
@@ -49,20 +54,24 @@ class _InvoiceItemGridState extends State<InvoiceItemGrid> {
                             style: GoogleFonts.poppins(
                                 color: Colors.black, fontSize: 20))),
                     Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Icon(
-                        Icons.edit,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Icon(
-                        Icons.delete_outline,
-                        color: Colors.red,
-                      ),
-                    )
+                    !widget.isEditable
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.grey,
+                            ),
+                          ),
+                    !widget.isEditable
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Icon(
+                              Icons.delete_outline,
+                              color: Colors.red,
+                            ),
+                          )
                   ],
                 ),
               ),
@@ -79,32 +88,29 @@ class _InvoiceItemGridState extends State<InvoiceItemGrid> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        RichText(
-                          text: TextSpan(
-                            text: 'Rs.',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: '${widget.invoiceItem.unitPrice}',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                              TextSpan(
-                                  text: ' X ',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 12)),
-                              TextSpan(
-                                  text: '${widget.invoiceItem.quantity}',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                              TextSpan(
-                                  text: ' ${widget.invoiceItem.uom}',
-                                  style: TextStyle(fontSize: 12)),
-                            ],
-                          ),
+                        Row(
+                          children: [
+                            iconWithText(
+                              FontAwesomeIcons.rupeeSign,
+                              10,
+                              "${widget.invoiceItem.unitPrice}",
+                              color: Colors.grey,
+                              fontsize: 16,
+                            ),
+                            Text(' X ',
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 10)),
+                            Text('${widget.invoiceItem.quantity}',
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold)),
+                            Text(' ${widget.invoiceItem.uom}',
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold))
+                          ],
                         ),
                         widget.invoiceItem.cgst! +
                                     widget.invoiceItem.sgst! +
@@ -114,54 +120,52 @@ class _InvoiceItemGridState extends State<InvoiceItemGrid> {
                             : widget.invoiceItem.igst == 0
                                 ? Row(
                                     children: [
-                                      RichText(
-                                        text: TextSpan(
-                                          text: 'CGST(Rs.) ',
+                                      Text('cgst: ',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize: 12),
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                                text:
-                                                    '${widget.invoiceItem.cgst!}',
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16)),
-                                          ],
-                                        ),
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12)),
+                                      iconWithText(
+                                        FontAwesomeIcons.rupeeSign,
+                                        8,
+                                        "${widget.invoiceItem.cgst!}",
+                                        color: Colors.grey,
+                                        fontsize: 12,
                                       ),
-                                      RichText(
-                                        text: TextSpan(
-                                          text: '  SGST(Rs.) ',
+                                      SizedBox(
+                                          height: 10,
+                                          child: const VerticalDivider(
+                                            thickness: 2,
+                                          )),
+                                      Text('sgst: ',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize: 12),
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                                text:
-                                                    '${widget.invoiceItem.cgst!}',
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16)),
-                                          ],
-                                        ),
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12)),
+                                      iconWithText(
+                                        FontAwesomeIcons.rupeeSign,
+                                        8,
+                                        "${widget.invoiceItem.sgst!}",
+                                        color: Colors.grey,
+                                        fontsize: 12,
                                       ),
                                     ],
                                   )
-                                : RichText(
-                                    text: TextSpan(
-                                      text: 'IGST ',
-                                      style: TextStyle(
-                                          color: Colors.grey, fontSize: 12),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text:
-                                                'Rs.${widget.invoiceItem.igst!}',
-                                            style: TextStyle(
-                                                color: Colors.grey[900],
-                                                fontSize: 16)),
-                                      ],
-                                    ),
+                                : Row(
+                                    children: [
+                                      Text('igst: ',
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12)),
+                                      iconWithText(
+                                        FontAwesomeIcons.rupeeSign,
+                                        8,
+                                        "${widget.invoiceItem.igst!}",
+                                        color: Colors.grey,
+                                        fontsize: 12,
+                                      ),
+                                    ],
                                   ),
                       ],
                     ),
@@ -180,7 +184,10 @@ class _InvoiceItemGridState extends State<InvoiceItemGrid> {
                       children: [
                         Text(
                           "Total",
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
                         ),
                         RichText(
                           text: TextSpan(

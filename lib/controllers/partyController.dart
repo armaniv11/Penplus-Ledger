@@ -2,47 +2,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:penon/models/company_model.dart';
 import 'package:penon/models/party_model.dart';
 
 class PartyController extends GetxController {
   List<PartyModel> allParties = <PartyModel>[].obs;
-  // double cartTaxes = 0.obs as double;
-  // double cartBeforeTax = 0.obs as double;
 
   // int get countitems => cartItems.length;
-
-  // double get cartPrice => cartItems.fold(
-  //     0,
-  //     (sum, element) =>
-  //         sum +
-  //         (element.saleprice! * element.quantity!) +
-  //         element.deliveryCharge);
-
-  // double get cartShipping =>
-  //     cartItems.fold(0, (sum, element) => sum + (element.deliveryCharge));
-
-  // String get cartBeforeTax {
-  //   double asd = cartItems.fold(
-  //       0,
-  //       (sum, element) =>
-  //           sum +
-  //           (element.saleprice! * element.quantity!) +
-  //           element.deliveryCharge);
-  //   return (asd - getCartTax).toStringAsFixed(2);
-  // }
 
   @override
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
-    var parties = GetStorage().read('allparties') ?? [];
-    print(parties.length);
-    parties.forEach((element) {
-      allParties.add(PartyModel.fromJson(element));
-    });
+    // GetStorage().erase();
+    var parties = GetStorage().read('allparties') ?? <PartyModel>[];
+    if (GetStorage().read('selfcompanyinfo') == null) {
+      CompanyModel company = await getCompanyData();
+      GetStorage().write('selfcompanyinfo', company.toJson());
+    }
+
     if (parties.length == 0) {
       allParties = await getData();
       GetStorage().write('allparties', allParties);
+    } else {
+      parties.forEach((element) {
+        allParties.add(PartyModel.fromJson(element));
+      });
     }
   }
 
@@ -52,6 +37,20 @@ class PartyController extends GetxController {
     return querySnapshot.docs
         .map((m) => PartyModel.fromJson(m.data() as Map<String, dynamic>))
         .toList();
+    // return products;
+  }
+
+  Future<CompanyModel> getCompanyData() async {
+    print(GetStorage().read('mob1'));
+    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+        .collection('Company')
+        .doc('8874030006')
+        .get();
+    // print(object)
+    return CompanyModel.fromDoc(docSnapshot);
+    // return docSnapshot
+    //     .map((m) => PartyModel.fromJson(m.data() as Map<String, dynamic>))
+    //     .toList();
     // return products;
   }
 

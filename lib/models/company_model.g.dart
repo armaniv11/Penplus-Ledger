@@ -7,7 +7,7 @@ part of 'company_model.dart';
 // **************************************************************************
 
 CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel(
-      firmName: json['firmName'] as String?,
+      firmName: json['firmName'] as String? ?? '',
       firmAddress: json['firmAddress'] as String?,
       state: json['state'] as String?,
       emailID: json['emailID'] as String?,
@@ -23,6 +23,10 @@ CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel(
           ? null
           : DateTime.parse(json['updatedAt'] as String),
       isDeleted: json['isDeleted'] as bool? ?? false,
+      permissions: (json['permissions'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      saleInvoiceCount: json['saleInvoiceCount'] as int? ?? 0,
       session: json['session'] as String? ?? '2021-22',
     );
 
@@ -38,7 +42,9 @@ Map<String, dynamic> _$CompanyModelToJson(CompanyModel instance) =>
       'gstNo': instance.gstNo,
       'website': instance.website,
       'session': instance.session,
+      'permissions': instance.permissions,
       'isDeleted': instance.isDeleted,
+      'saleInvoiceCount': instance.saleInvoiceCount,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
     };

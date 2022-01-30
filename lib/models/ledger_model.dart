@@ -12,6 +12,11 @@ class LedgerModel {
   String transactionType;
   String? narration;
   bool isDeleted;
+  String invoiceId;
+  String companyId;
+  String invoiceNo;
+  @TimestampConvertDatetime()
+  DateTime? invoiceDate;
   @TimestampConvertDatetime()
   DateTime? createdAt;
   @TimestampConvertDatetime()
@@ -25,7 +30,11 @@ class LedgerModel {
       required this.transactionType,
       this.narration,
       this.isDeleted = false,
+      required this.invoiceId,
+      required this.companyId,
       this.createdAt,
+      required this.invoiceNo,
+      required this.invoiceDate,
       this.updatedAt});
 
   factory LedgerModel.fromJson(Map<String, dynamic> json) =>
