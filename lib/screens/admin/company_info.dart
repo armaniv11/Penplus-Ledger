@@ -322,107 +322,108 @@ class _AddCompanyState extends State<AddCompany> {
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover)),
-      child: Container(
-        decoration: BoxDecoration(color: Colors.blue.withOpacity(0.5)),
-        child: Scaffold(
-          // backgroundColor: Colors.pink.withOpacity(0.7),
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            title: Text(labelText),
-            elevation: 0,
+              image: AssetImage('assets/images/bg.jpg'), fit: BoxFit.cover)),
+      child: Scaffold(
+        backgroundColor: Colors.white.withOpacity(0.8),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.grey[800]),
+          title: Text(
+            labelText,
+            style: TextStyle(color: Colors.grey[800]),
           ),
-          body: ModalProgressHUD(
-            inAsyncCall: isLoading,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    customTextFormField(
-                        companyController,
-                        "Firm Name",
-                        Icon(
-                          Icons.shop,
-                          size: 16,
-                        ),
-                        validationEnabled: true),
-                    customTextFormField(
-                        addressController,
-                        "Firm Address",
-                        Icon(
-                          Icons.local_post_office,
-                          size: 16,
-                        ),
-                        validationEnabled: true),
-                    CustomDropDown(
-                        heading: "State",
-                        items: stateMenu,
-                        selected: _selectedState,
-                        callBack: selectState),
-                    customTextFormField(
-                        emailController,
-                        "Email ID",
-                        Icon(
-                          FontAwesomeIcons.addressCard,
-                          size: 16,
-                        ),
-                        inputtype: TextInputType.emailAddress),
-                    customTextFormField(
-                        mob1Controller,
-                        "Mobile Number 1",
-                        Icon(
-                          FontAwesomeIcons.phone,
-                          size: 16,
-                        ),
-                        enabled: false,
-                        inputtype: TextInputType.phone),
-                    customTextFormField(
-                        mob2Controller,
-                        "Mobile Number 2",
-                        Icon(
-                          FontAwesomeIcons.phone,
-                          size: 16,
-                        ),
-                        inputtype: TextInputType.phone),
-                    CustomDropDown(
-                        heading: "GST Type",
-                        items: gstTypeMenu,
-                        selected: selectedGSTType,
-                        callBack: selectGST),
-                    customTextFormField(
-                      gstnoController,
-                      "GST Number",
+          elevation: 0,
+        ),
+        body: ModalProgressHUD(
+          inAsyncCall: isLoading,
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  customTextFormField(
+                      companyController,
+                      "Firm Name",
                       Icon(
-                        Icons.format_list_numbered,
+                        Icons.shop,
                         size: 16,
                       ),
-                    ),
-                    customTextFormField(
-                      websiteController,
-                      "Website",
+                      validationEnabled: true),
+                  customTextFormField(
+                      addressController,
+                      "Firm Address",
                       Icon(
-                        FontAwesomeIcons.weebly,
+                        Icons.local_post_office,
                         size: 16,
                       ),
+                      validationEnabled: true),
+                  CustomDropDown(
+                      heading: "State",
+                      items: stateMenu,
+                      selected: _selectedState,
+                      callBack: selectState),
+                  customTextFormField(
+                      emailController,
+                      "Email ID",
+                      Icon(
+                        FontAwesomeIcons.addressCard,
+                        size: 16,
+                      ),
+                      inputtype: TextInputType.emailAddress),
+                  customTextFormField(
+                      mob1Controller,
+                      "Mobile Number 1",
+                      Icon(
+                        FontAwesomeIcons.phone,
+                        size: 16,
+                      ),
+                      enabled: false,
+                      inputtype: TextInputType.phone),
+                  customTextFormField(
+                      mob2Controller,
+                      "Mobile Number 2",
+                      Icon(
+                        FontAwesomeIcons.phone,
+                        size: 16,
+                      ),
+                      inputtype: TextInputType.phone),
+                  CustomDropDown(
+                      heading: "GST Type",
+                      items: gstTypeMenu,
+                      selected: selectedGSTType,
+                      callBack: selectGST),
+                  customTextFormField(
+                    gstnoController,
+                    "GST Number",
+                    Icon(
+                      Icons.format_list_numbered,
+                      size: 16,
                     ),
-                    CustomDropDown(
-                        heading: "Session",
-                        items: sessionMenu,
-                        selected: selectedSession,
-                        callBack: selectSession),
-                    InkWell(
-                        onTap: () {
-                          saveCompany();
-                          // if (widget.productId == '')
-                          //   saveProduct(productImage1, productController.text);
-                          // else
-                          //   updateProduct(productController.text);
-                        },
-                        child: customButton("Save")),
-                  ],
-                ),
+                  ),
+                  customTextFormField(
+                    websiteController,
+                    "Website",
+                    Icon(
+                      FontAwesomeIcons.weebly,
+                      size: 16,
+                    ),
+                  ),
+                  CustomDropDown(
+                      heading: "Session",
+                      items: sessionMenu,
+                      selected: selectedSession,
+                      callBack: selectSession),
+                  InkWell(
+                      onTap: () {
+                        saveCompany();
+                        // if (widget.productId == '')
+                        //   saveProduct(productImage1, productController.text);
+                        // else
+                        //   updateProduct(productController.text);
+                      },
+                      child: customButton("Save")),
+                ],
               ),
             ),
           ),

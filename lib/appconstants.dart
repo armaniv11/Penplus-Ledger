@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class AppConstants {
   static String appName = 'PENPLUS';
   static List<String> gstType = ['Unregistered', 'Regular', "Composition"];
@@ -12,6 +14,11 @@ class AppConstants {
   static List<String> openingBalMenu = ['Pay', 'Receive'];
   static String selectedOpeningType = 'Pay';
   static List<String> session = ['2020-21', '2021-22', '2022-23'];
+  static List<Color> bgColor = [
+    Colors.grey[50]!.withOpacity(0.8),
+    Colors.grey[100]!.withOpacity(0.8),
+    Colors.grey[400]!.withOpacity(0.8)
+  ];
 
   static List<String> stateMenu = [
     "Jammu and Kashmir(01)",

@@ -272,12 +272,16 @@ class _AddPartyState extends State<AddParty> {
           image: DecorationImage(
               image: AssetImage('assets/images/bg.jpg'), fit: BoxFit.cover)),
       child: Container(
-        decoration: BoxDecoration(color: Colors.blue.withOpacity(0.5)),
+        decoration: BoxDecoration(color: Colors.white.withOpacity(0.8)),
         child: Scaffold(
           // backgroundColor: Colors.pink.withOpacity(0.7),
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            title: Text(labelText),
+            iconTheme: IconThemeData(color: Colors.grey[800]),
+            title: Text(
+              labelText,
+              style: TextStyle(color: Colors.grey[900]),
+            ),
             elevation: 0,
           ),
           body: ModalProgressHUD(

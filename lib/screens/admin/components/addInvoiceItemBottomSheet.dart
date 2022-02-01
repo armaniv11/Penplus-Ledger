@@ -23,7 +23,7 @@ import 'package:random_string/random_string.dart';
 class AddInvoiceItemBottomSheet extends StatefulWidget {
   final PartyModel partyName;
   final String invoiceNo;
-  final invoiceDate;
+  final String invoiceDate;
   final String invoiceType;
 
   const AddInvoiceItemBottomSheet(
@@ -31,7 +31,7 @@ class AddInvoiceItemBottomSheet extends StatefulWidget {
       required this.partyName,
       required this.invoiceNo,
       required this.invoiceDate,
-      this.invoiceType = 'Purchase'})
+      required this.invoiceType})
       : super(key: key);
   // final ValueChanged<bool> callback;
 
@@ -70,7 +70,7 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
     // List<InvoiceItemsModel> asdf = <InvoiceItemsModel>[];
 
     // PartyModel par = PartyModel(partyName: 'asdff', companyId: '12');
-    // });
+    // });Timestamp.fromDate(currentPhoneDate)
     SaleModel purchase = SaleModel(
         party: widget.partyName,
         invoiceDate: DateTime.parse(widget.invoiceDate),
@@ -111,14 +111,20 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
       transactionType: widget.invoiceType,
       invoiceDate: DateTime.parse(widget.invoiceDate),
     );
-    batch.set(
-      db.collection('Sale').doc(purchase.invoiceId),
-      purchase.toJson(),
-    );
+
     if (widget.invoiceType == 'Sale') {
       batch.update(db.collection('Company').doc(companyInfo.mob1), {
         'saleInvoiceCount': FieldValue.increment(1),
       });
+      batch.set(
+        db.collection('Sale').doc(purchase.invoiceId),
+        purchase.toJson(),
+      );
+    } else {
+      batch.set(
+        db.collection('Purchase').doc(purchase.invoiceId),
+        purchase.toJson(),
+      );
     }
 
     batch.set(
@@ -133,7 +139,7 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
       invoiceItemsController.clearInvoiceItems();
       return Flushbar(
         title: "Success",
-        message: "Sale Invoice created Successfully!!",
+        message: "${widget.invoiceType} Invoice created Successfully!!",
         duration: Duration(seconds: 2),
       )..show(context).then((value) {
           setState(() {
@@ -161,6 +167,11 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
 
     if (invoiceItemsController.dueAmount != 0.0)
       dueController.text = invoiceItemsController.dueAfterPaid;
+
+    if (dueController.text.isEmpty) {
+      paidController.text = invoiceItemsController.totalAfterDeduction;
+      dueController.text = 0.toString();
+    }
   }
 
   changeDisc(String data) {
@@ -175,6 +186,12 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
     dueController.text = await invoiceItemsController.dueAfterPaid;
     print(data);
     print(invoiceItemsController.paidAmount);
+  }
+
+  void deleteClicked(int index) {
+    setState(() {
+      invoiceItemsController.deleteIndex(index);
+    });
   }
 
   @override
@@ -271,6 +288,8 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
                                 return InvoiceItemGrid(
                                   index: index + 1,
                                   invoiceItem: controller.invoiceItems[index],
+                                  isEditable: true,
+                                  callback: deleteClicked,
                                 );
                               });
                         })),

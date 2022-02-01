@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:penon/controllers/invoiceItemsController.dart';
 import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/models/invoice_items_model.dart';
 
@@ -9,11 +10,13 @@ class InvoiceItemGrid extends StatefulWidget {
   final InvoiceItemsModel invoiceItem;
   final int index;
   final bool isEditable;
+  final ValueChanged<int>? callback;
   const InvoiceItemGrid(
       {Key? key,
       required this.invoiceItem,
       required this.index,
-      this.isEditable = false})
+      this.isEditable = false,
+      this.callback})
       : super(key: key);
 
   @override
@@ -21,12 +24,13 @@ class InvoiceItemGrid extends StatefulWidget {
 }
 
 class _InvoiceItemGridState extends State<InvoiceItemGrid> {
+  final InvoiceItemsController invoiceItemsController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: Material(
-        elevation: 8,
+        elevation: 4,
         borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: EdgeInsets.only(top: 4),
@@ -57,7 +61,7 @@ class _InvoiceItemGridState extends State<InvoiceItemGrid> {
                     !widget.isEditable
                         ? Container()
                         : Padding(
-                            padding: const EdgeInsets.all(6.0),
+                            padding: const EdgeInsets.only(right: 10),
                             child: Icon(
                               Icons.edit,
                               color: Colors.grey,
@@ -65,11 +69,22 @@ class _InvoiceItemGridState extends State<InvoiceItemGrid> {
                           ),
                     !widget.isEditable
                         ? Container()
-                        : Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Icon(
-                              Icons.delete_outline,
-                              color: Colors.red,
+                        : InkWell(
+                            onTap: () {
+                              setState(() {
+                                widget.callback!(widget.index - 1);
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                  color: Colors.red[200],
+                                  shape: BoxShape.circle),
+                              child: Icon(
+                                Icons.delete_outline,
+                                color: Colors.white,
+                                size: 18,
+                              ),
                             ),
                           )
                   ],

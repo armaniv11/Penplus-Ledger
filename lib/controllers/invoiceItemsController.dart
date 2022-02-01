@@ -48,15 +48,10 @@ class InvoiceItemsController extends GetxController {
       print("replaced");
       invoiceItems[itemIndex] = item;
     }
+  }
 
-    // invoiceItems.addIf(
-    //     invoiceItems
-    //             .firstWhereOrNull((element) => element.itemId == item.itemId) ==
-    //         null,
-    //     item);
-    // invoiceItems.add(item);
-    // print("Cart Length: ${allParties.length}");
-    // GetStorage().write('allparties', allParties);
+  deleteIndex(int index) {
+    invoiceItems.removeAt(index);
   }
 
   addCashDiscount(disc) {

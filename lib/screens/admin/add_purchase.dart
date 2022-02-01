@@ -4,6 +4,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -111,6 +112,7 @@ class _AddPurchaseState extends State<AddPurchase> {
 
   void selectInvoiceDate(String selected) {
     selectedInvoiceDate = selected;
+    print(selected);
   }
 
   late ItemModel selectedItemModel;
@@ -242,16 +244,17 @@ class _AddPurchaseState extends State<AddPurchase> {
     double width = MediaQuery.of(context).size.width;
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue[900]!, Colors.grey[800]!]),
-      ),
+          image: DecorationImage(
+              image: AssetImage('assets/images/bg.jpg'), fit: BoxFit.cover)),
       child: Scaffold(
-        // backgroundColor: Colors.pink.withOpacity(0.7),
+        backgroundColor: Colors.white.withOpacity(0.7),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text("Purchase"),
+          iconTheme: IconThemeData(color: Colors.grey[800]),
+          title: Text(
+            "Purchase",
+            style: TextStyle(color: Colors.grey[900]),
+          ),
           elevation: 0,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -342,7 +345,8 @@ class _AddPurchaseState extends State<AddPurchase> {
                                           return AddInvoiceItemBottomSheet(
                                             partyName: selectedPartyModel!,
                                             invoiceNo: invoiceNoController.text,
-                                            invoiceDate: selectedInvoiceDate,
+                                            invoiceDate: selectedInvoiceDate!,
+                                            invoiceType: 'Purchase',
 
                                             // callback: changeCart,
                                           );
@@ -624,6 +628,15 @@ class _AddPurchaseState extends State<AddPurchase> {
                         } else {
                           print(_selectedParty);
                           saveItem();
+                          Fluttertoast.showToast(
+                              msg: "$_selectedItem added to InvoiceList!!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          // FlutterToast
                         }
                       },
                       child: customButton(labelText,

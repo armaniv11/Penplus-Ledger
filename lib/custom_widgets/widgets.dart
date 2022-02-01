@@ -250,13 +250,14 @@ Widget iconWithText(IconData iconname, double iconsize, String name,
     {Color color: Colors.black,
     double fontsize: 18,
     TextDecoration textDecoration: TextDecoration.none,
+    MainAxisAlignment mainAxisAlignment: MainAxisAlignment.start,
     FontWeight fontWeight: FontWeight.w900}) {
   return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: mainAxisAlignment,
     children: [
       Padding(
-        padding: const EdgeInsets.only(top: 5, right: 2),
+        padding: const EdgeInsets.only(top: 3),
         child: Icon(
           iconname,
           size: iconsize,
@@ -265,12 +266,13 @@ Widget iconWithText(IconData iconname, double iconsize, String name,
       ),
       Text(
         name,
+        overflow: TextOverflow.visible,
         style: TextStyle(
-            decoration: textDecoration,
-            fontSize: fontsize,
-            color: color,
-            fontWeight: fontWeight,
-            letterSpacing: 1),
+          decoration: textDecoration,
+          fontSize: fontsize,
+          color: color,
+          fontWeight: fontWeight,
+        ),
       )
     ],
   );

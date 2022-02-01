@@ -169,9 +169,9 @@ class _CustomDropDownState extends State<CustomDropDown> {
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
       child: Material(
         type: MaterialType.canvas,
-        color: Colors.white.withOpacity(1),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        elevation: 8,
+        elevation: 0,
         child: Padding(
           padding: const EdgeInsets.all(3.0),
           child: Row(

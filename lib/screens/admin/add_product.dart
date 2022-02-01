@@ -341,135 +341,135 @@ class _AddProductState extends State<AddProduct> {
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover)),
-      child: Container(
-        decoration: BoxDecoration(color: Colors.blue.withOpacity(0.5)),
-        child: Scaffold(
-          // backgroundColor: Colors.pink.withOpacity(0.7),
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            title: Text(labelText),
-            elevation: 0,
+              image: AssetImage('assets/images/bg.jpg'), fit: BoxFit.cover)),
+      child: Scaffold(
+        backgroundColor: Colors.white.withOpacity(0.8),
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.grey[800]),
+          backgroundColor: Colors.transparent,
+          title: Text(
+            labelText,
+            style: TextStyle(color: Colors.grey[900]),
           ),
-          body: ModalProgressHUD(
-            inAsyncCall: isLoading,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    customTextFormField(
-                        itemNameController,
-                        "Item Name",
-                        Icon(
-                          FontAwesomeIcons.stickyNote,
-                          size: 16,
-                        ),
-                        validationEnabled: true),
-                    customTextFormField(
-                      hsnController,
-                      "Item HSN",
+          elevation: 0,
+        ),
+        body: ModalProgressHUD(
+          inAsyncCall: isLoading,
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  customTextFormField(
+                      itemNameController,
+                      "Item Name",
                       Icon(
-                        FontAwesomeIcons.gripVertical,
+                        FontAwesomeIcons.stickyNote,
                         size: 16,
                       ),
+                      validationEnabled: true),
+                  customTextFormField(
+                    hsnController,
+                    "Item HSN",
+                    Icon(
+                      FontAwesomeIcons.gripVertical,
+                      size: 16,
                     ),
-                    CustomDropDown(
-                        heading: "GST Slab (in %)",
-                        items: gstMenu,
-                        selected: _selectedGST,
-                        callBack: selectGST),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        customTextFormField(
-                            purchasePriceController,
-                            "Purchase Price",
-                            Icon(
-                              FontAwesomeIcons.rupeeSign,
-                              size: 16,
-                            ),
-                            inputtype: TextInputType.number,
-                            width: width / 2,
-                            validationEnabled: true),
-                        customTextFormField(
-                          sellPriceController,
-                          "Sell Price",
+                  ),
+                  CustomDropDown(
+                      heading: "GST Slab (in %)",
+                      items: gstMenu,
+                      selected: _selectedGST,
+                      callBack: selectGST),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      customTextFormField(
+                          purchasePriceController,
+                          "Purchase Price",
                           Icon(
                             FontAwesomeIcons.rupeeSign,
                             size: 16,
                           ),
                           inputtype: TextInputType.number,
                           width: width / 2,
+                          validationEnabled: true),
+                      customTextFormField(
+                        sellPriceController,
+                        "Sell Price",
+                        Icon(
+                          FontAwesomeIcons.rupeeSign,
+                          size: 16,
                         ),
-                      ],
-                    ),
-                    CustomCheckBox(
-                      text: "GST Included in Sell Price",
-                      option: gstInSP,
-                      callBack: toggleGSTInSP,
-                    ),
-                    CustomDropDown(
-                        heading: "Product Unit of Measurement",
-                        items: uomMenu,
-                        selected: _selectedUOM,
-                        callBack: selectUOM),
-                    customTextFormField(
-                        inStockController, "Item In Stock", null,
                         inputtype: TextInputType.number,
-                        width: width,
-                        suffixText: _selectedUOM!),
-                    customTextFormField(
-                      descriptionController,
-                      "Product Description",
-                      Icon(
-                        FontAwesomeIcons.info,
-                        size: 16,
+                        width: width / 2,
                       ),
+                    ],
+                  ),
+                  CustomCheckBox(
+                    text: "GST Included in Sell Price",
+                    option: gstInSP,
+                    callBack: toggleGSTInSP,
+                  ),
+                  CustomDropDown(
+                      heading: "Product Unit of Measurement",
+                      items: uomMenu,
+                      selected: _selectedUOM,
+                      callBack: selectUOM),
+                  customTextFormField(inStockController, "Item In Stock", null,
+                      inputtype: TextInputType.number,
+                      width: width,
+                      suffixText: _selectedUOM!),
+                  customTextFormField(
+                    descriptionController,
+                    "Product Description",
+                    Icon(
+                      FontAwesomeIcons.info,
+                      size: 16,
                     ),
-                    CustomCheckBox(
-                      text: "Available On rent !",
-                      option: isRentable,
-                      callBack: toggleIsRent,
-                    ),
-                    isRentable!
-                        ? Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customTextFormField(
-                                  rentController,
-                                  "Rent Amount",
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 16,
-                                  ),
-                                  inputtype: TextInputType.number,
-                                  width: width / 2),
-                              customTextFormField(
-                                  rentDepositController,
-                                  "Security Deposit",
-                                  Icon(
-                                    FontAwesomeIcons.rupeeSign,
-                                    size: 16,
-                                  ),
-                                  inputtype: TextInputType.number,
-                                  width: width / 2),
-                            ],
-                          )
-                        : Container(),
-                    InkWell(
-                        onTap: () {
-                          saveItem();
-                          // if (widget.productId == '')
-                          //   saveProduct(productImage1, productController.text);
-                          // else
-                          //   updateProduct(productController.text);
-                        },
-                        child: customButton(labelText,
-                            backgroundColor: Colors.pink)),
-                  ],
-                ),
+                  ),
+                  CustomCheckBox(
+                    text: "Available On rent !",
+                    option: isRentable,
+                    callBack: toggleIsRent,
+                  ),
+                  isRentable!
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            customTextFormField(
+                                rentController,
+                                "Rent Amount",
+                                Icon(
+                                  FontAwesomeIcons.rupeeSign,
+                                  size: 16,
+                                ),
+                                inputtype: TextInputType.number,
+                                width: width / 2),
+                            customTextFormField(
+                                rentDepositController,
+                                "Security Deposit",
+                                Icon(
+                                  FontAwesomeIcons.rupeeSign,
+                                  size: 16,
+                                ),
+                                inputtype: TextInputType.number,
+                                width: width / 2),
+                          ],
+                        )
+                      : Container(),
+                  InkWell(
+                      onTap: () {
+                        saveItem();
+                        // if (widget.productId == '')
+                        //   saveProduct(productImage1, productController.text);
+                        // else
+                        //   updateProduct(productController.text);
+                      },
+                      child: customButton(labelText,
+                          backgroundColor: Colors.pink)),
+                ],
               ),
             ),
           ),

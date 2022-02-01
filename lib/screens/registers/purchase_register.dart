@@ -69,28 +69,32 @@ class _PurchaseRegisterState extends State<PurchaseRegister> {
     Size size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue[800]!, Colors.grey[800]!]),
-      ),
+          image: DecorationImage(
+              image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover)),
       child: Scaffold(
-        // backgroundColor: Colors.pink.withOpacity(0.7),
+        backgroundColor: Colors.blue[200]!.withOpacity(0.4),
         appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Colors.transparent,
-          title: const Text("Purchase Register"),
+          title: const Text(
+            "Purchase Register",
+            style: TextStyle(color: Colors.white),
+          ),
           elevation: 0,
         ),
         body: ModalProgressHUD(
             inAsyncCall: isLoading,
-            child: ListView.builder(
-                itemCount: purchaseRegister.length,
-                itemBuilder: (BuildContext context, index) {
-                  return RegisterList(
-                    invoice: purchaseRegister[index],
-                    index: index + 1,
-                  );
-                })),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: ListView.builder(
+                  itemCount: purchaseRegister.length,
+                  itemBuilder: (BuildContext context, index) {
+                    return RegisterList(
+                      invoice: purchaseRegister[index],
+                      index: index + 1,
+                    );
+                  }),
+            )),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:penon/appconstants.dart';
 
 import 'package:penon/controllers/partyController.dart';
 
@@ -64,13 +65,10 @@ class _SaleRegisterState extends State<SaleRegister> {
     Size size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue[800]!, Colors.grey[800]!]),
-      ),
+          image: DecorationImage(
+              image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover)),
       child: Scaffold(
-        // backgroundColor: Colors.pink.withOpacity(0.7),
+        backgroundColor: Colors.blue[200]!.withOpacity(0.4),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: const Text("Sale Register"),

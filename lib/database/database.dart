@@ -193,6 +193,7 @@ class DatabaseService {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('Ledger')
         .where('companyId', isEqualTo: '8874030006')
+        .orderBy('createdAt')
         .get();
     return querySnapshot.docs
         .map((e) => LedgerModel.fromJson(e.data() as Map<String, dynamic>))

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:penon/appconstants.dart';
 import 'package:penon/controllers/partyController.dart';
 import 'package:penon/database/database.dart';
 import 'package:penon/models/ledger_model.dart';
@@ -58,28 +59,70 @@ class _LedgerState extends State<Ledger> {
     Size size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue[800]!, Colors.grey[800]!]),
-      ),
+          image: DecorationImage(
+              image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover)),
       child: Scaffold(
-        // backgroundColor: Colors.pink.withOpacity(0.7),
+        backgroundColor: Colors.blue[200]!.withOpacity(0.3),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: const Text("Ledger"),
+          // iconTheme: IconThemeData(color: Colors.black),
+          title: const Text(
+            "Ledger",
+            style: TextStyle(color: Colors.white),
+          ),
           elevation: 0,
+          actions: [Icon(Icons.password)],
         ),
         body: ModalProgressHUD(
             inAsyncCall: isLoading,
-            child: ListView.builder(
-                itemCount: ledger.length,
-                itemBuilder: (BuildContext context, index) {
-                  return LedgerList(
-                    invoice: ledger[index],
-                    index: index + 1,
-                  );
-                })),
+            child: Column(
+              children: [
+                Container(
+                  height: size.height * 0.07,
+                  color: Colors.lightBlue[100],
+                  child: Row(
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      Container(
+                          width: size.width * 0.46,
+                          child: Text(
+                            "Party",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                      Container(
+                          width: size.width * 0.24,
+                          child: Text(
+                            "Credit",
+                            textAlign: TextAlign.right,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                      Container(
+                          width: size.width * 0.24,
+                          child: Text(
+                            "Debit",
+                            textAlign: TextAlign.right,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ))
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    height: size.height * 0.9,
+                    child: ListView.builder(
+                        itemCount: ledger.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, index) {
+                          return LedgerList(
+                            invoice: ledger[index],
+                            index: index + 1,
+                          );
+                        }),
+                  ),
+                ),
+              ],
+            )),
       ),
     );
   }

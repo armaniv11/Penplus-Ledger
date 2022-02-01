@@ -8,8 +8,7 @@ part of 'sale_model.dart';
 
 SaleModel _$SaleModelFromJson(Map<String, dynamic> json) => SaleModel(
       party: PartyModel.fromJson(json['party'] as Map<String, dynamic>),
-      invoiceDate: const TimestampConvertDatetime()
-          .fromJson(json['invoiceDate'] as Timestamp),
+      invoiceDate: DateTime.parse(json['invoiceDate'] as String),
       invoiceNo: json['invoiceNo'] as String,
       cashDiscount: (json['cashDiscount'] as num?)?.toDouble() ?? 0,
       grandTotal: (json['grandTotal'] as num?)?.toDouble() ?? 0,
@@ -34,8 +33,7 @@ Map<String, dynamic> _$SaleModelToJson(SaleModel instance) {
   return <String, dynamic>{
     'party': instance.party.toJson(),
     'invoiceNo': instance.invoiceNo,
-    'invoiceDate':
-        const TimestampConvertDatetime().toJson(instance.invoiceDate),
+    'invoiceDate': instance.invoiceDate.toIso8601String(),
     'cashDiscount': instance.cashDiscount,
     'grandTotal': instance.grandTotal,
     'paidAmount': instance.paidAmount,

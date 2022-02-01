@@ -252,16 +252,17 @@ class _AddSaleState extends State<AddSale> {
     double width = MediaQuery.of(context).size.width;
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue[900]!, Colors.grey[800]!]),
-      ),
+          image: DecorationImage(
+              image: AssetImage('assets/images/bg.jpg'), fit: BoxFit.cover)),
       child: Scaffold(
-        // backgroundColor: Colors.pink.withOpacity(0.7),
+        backgroundColor: Colors.white.withOpacity(0.7),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text("Sale"),
+          iconTheme: IconThemeData(color: Colors.grey[800]),
+          title: Text(
+            "Sale",
+            style: TextStyle(color: Colors.grey[900]),
+          ),
           elevation: 0,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -376,7 +377,7 @@ class _AddSaleState extends State<AddSale> {
                                               partyName: selectedPartyModel!,
                                               invoiceNo:
                                                   invoiceNoController.text,
-                                              invoiceDate: selectedInvoiceDate,
+                                              invoiceDate: selectedInvoiceDate!,
                                               invoiceType: 'Sale',
 
                                               // callback: changeCart,
