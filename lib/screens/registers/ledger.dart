@@ -5,7 +5,6 @@ import 'package:penon/appconstants.dart';
 import 'package:penon/controllers/partyController.dart';
 import 'package:penon/database/database.dart';
 import 'package:penon/models/ledger_model.dart';
-import 'package:penon/models/sale_model.dart';
 import 'package:penon/screens/registers/components/listview_ledger.dart';
 import 'package:penon/screens/registers/components/listview_register.dart';
 

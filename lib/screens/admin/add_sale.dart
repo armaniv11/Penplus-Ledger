@@ -22,14 +22,15 @@ import 'package:penon/models/company_model.dart';
 import 'package:penon/models/invoice_items_model.dart';
 import 'package:penon/models/item_model.dart';
 import 'package:penon/models/party_model.dart';
-import 'package:penon/models/purchase_model.dart';
+import 'package:penon/models/invoice_model.dart';
 import 'package:penon/screens/shared/shared_functions.dart';
 import 'package:random_string/random_string.dart';
 
 import 'components/addInvoiceItemBottomSheet.dart';
 
 class AddSale extends StatefulWidget {
-  const AddSale({Key? key}) : super(key: key);
+  final InvoiceModel? updateInvoice;
+  const AddSale({Key? key, this.updateInvoice}) : super(key: key);
 
   @override
   _AddSaleState createState() => _AddSaleState();
@@ -40,6 +41,7 @@ class _AddSaleState extends State<AddSale> {
   final PartyController partyController = Get.find();
   final InvoiceItemsController invoiceItemsController = Get.find();
   TextEditingController selectedPartyController = TextEditingController();
+  TextEditingController selectedItemController = TextEditingController();
 
   TextEditingController invoiceNoController = TextEditingController();
   TextEditingController cashDiscountController = TextEditingController();
@@ -188,7 +190,7 @@ class _AddSaleState extends State<AddSale> {
         quantity: double.tryParse(quantityController.text),
         unitPrice: double.tryParse(unitPriceController.text),
         total: double.tryParse(totalController.text),
-        taxPercent: double.tryParse(_selectedTax!),
+        taxPercent: _selectedTax!,
         cgst: cgst,
         sgst: sgst,
         igst: igst,
@@ -493,7 +495,6 @@ class _AddSaleState extends State<AddSale> {
                                   );
                                 },
                                 onSuggestionSelected: (PartyModel party) {
-                                  print(party);
                                   selectedPartyController.text =
                                       party.partyName!;
                                   _selectedParty = party.partyName;
@@ -501,6 +502,15 @@ class _AddSaleState extends State<AddSale> {
                                 },
                               ),
                             ),
+                            selectedPartyController.text.isEmpty
+                                ? Container()
+                                : Padding(
+                                    padding: const EdgeInsets.only(left: 6),
+                                    child: InkWell(
+                                        onTap: () =>
+                                            selectedPartyController.clear(),
+                                        child: const Icon(Icons.clear)),
+                                  )
                           ],
                         ),
                       ),
@@ -537,6 +547,7 @@ class _AddSaleState extends State<AddSale> {
                               child: TypeAheadField(
                                 debounceDuration: Duration(milliseconds: 1000),
                                 textFieldConfiguration: TextFieldConfiguration(
+                                    controller: selectedItemController,
                                     textCapitalization:
                                         TextCapitalization.words,
                                     autofocus: false,
@@ -545,9 +556,6 @@ class _AddSaleState extends State<AddSale> {
                                     decoration: InputDecoration(
                                       fillColor: Colors.white,
                                       filled: true,
-                                      // contentPadding: EdgeInsets.only(left: 10),
-                                      // suffixIcon: Icon(Icons.search),
-                                      hintText: _selectedItem,
                                       border: InputBorder.none,
                                     )),
                                 suggestionsCallback: (product) async {
@@ -565,11 +573,21 @@ class _AddSaleState extends State<AddSale> {
                                 onSuggestionSelected: (ItemModel product) {
                                   print(product.itemName);
                                   _selectedItem = product.itemName;
+                                  selectedItemController.text = _selectedItem!;
                                   selectedItemModel = product;
                                   selectItem(selectedItemModel);
                                 },
                               ),
                             ),
+                            selectedItemController.text.isEmpty
+                                ? Container()
+                                : Padding(
+                                    padding: const EdgeInsets.only(left: 6),
+                                    child: InkWell(
+                                        onTap: () =>
+                                            selectedItemController.clear(),
+                                        child: Icon(Icons.clear)),
+                                  )
                           ],
                         ),
                       ),

@@ -15,7 +15,7 @@ import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/database/database.dart';
 import 'package:penon/models/item_model.dart';
 import 'package:penon/models/party_model.dart';
-import 'package:penon/models/purchase_model.dart';
+import 'package:penon/models/invoice_model.dart';
 import 'package:penon/screens/registers/components/listview_register.dart';
 import 'package:random_string/random_string.dart';
 
@@ -43,7 +43,7 @@ class _PurchaseRegisterState extends State<PurchaseRegister> {
   DatabaseService databaseService = DatabaseService();
 
   final _formKey = GlobalKey<FormState>();
-  List<PurchaseModel> purchaseRegister = [];
+  List<InvoiceModel> purchaseRegister = [];
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _PurchaseRegisterState extends State<PurchaseRegister> {
   }
 
   loadData() async {
-    databaseService.loadPurchaseRegister().then((value) {
+    databaseService.loadRegister('Purchase').then((value) {
       purchaseRegister = value;
       purchaseRegister.forEach((element) {
         print(element.invoiceNo);

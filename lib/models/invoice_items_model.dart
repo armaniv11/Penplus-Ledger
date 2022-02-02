@@ -11,7 +11,7 @@ class InvoiceItemsModel {
   double? quantity;
   double? unitPrice;
   double? total;
-  double? taxPercent;
+  String? taxPercent;
   double? cgst;
   double? sgst;
   double? igst;
@@ -24,7 +24,7 @@ class InvoiceItemsModel {
     this.quantity = 1,
     this.unitPrice = 0,
     this.total = 0,
-    this.taxPercent = 0,
+    this.taxPercent = '0',
     this.cgst = 0,
     this.sgst = 0,
     this.igst = 0,

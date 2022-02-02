@@ -10,8 +10,8 @@ import 'package:penon/appconstants.dart';
 import 'package:penon/controllers/partyController.dart';
 
 import 'package:penon/database/database.dart';
-import 'package:penon/models/purchase_model.dart';
-import 'package:penon/models/sale_model.dart';
+import 'package:penon/models/invoice_model.dart';
+
 import 'package:penon/screens/registers/components/listview_register.dart';
 import 'package:random_string/random_string.dart';
 
@@ -39,7 +39,7 @@ class _SaleRegisterState extends State<SaleRegister> {
   DatabaseService databaseService = DatabaseService();
 
   final _formKey = GlobalKey<FormState>();
-  List<SaleModel> SaleRegister = [];
+  List<InvoiceModel> SaleRegister = [];
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _SaleRegisterState extends State<SaleRegister> {
   }
 
   loadData() async {
-    databaseService.loadSaleRegister().then((value) {
+    databaseService.loadRegister('Sale').then((value) {
       SaleRegister = value;
       SaleRegister.forEach((element) {
         print(element.invoiceNo);

@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:penon/models/invoice_items_model.dart';
 import 'package:penon/models/party_model.dart';
-part 'purchase_model.g.dart';
+part 'invoice_model.g.dart';
 
 @JsonSerializable()
-class PurchaseModel {
+class InvoiceModel {
   PartyModel party;
   String? invoiceNo;
   @TimestampConvertDatetime()
@@ -19,13 +19,14 @@ class PurchaseModel {
   String invoiceId;
   String? companyId;
   bool isDeleted;
+  String invoiceType;
   List<InvoiceItemsModel> invoiceItems;
   @TimestampConvertDatetime()
   DateTime? createdAt;
   @TimestampConvertDatetime()
   DateTime? updatedAt;
 
-  PurchaseModel(
+  InvoiceModel(
       {required this.party,
       this.invoiceDate,
       required this.invoiceNo,
@@ -38,10 +39,11 @@ class PurchaseModel {
       this.companyId,
       required this.invoiceItems,
       this.isDeleted = false,
+      this.invoiceType = 'Purchase',
       this.updatedAt});
 
-  factory PurchaseModel.fromJson(Map<String, dynamic> json) =>
-      _$PurchaseModelFromJson(json);
+  factory InvoiceModel.fromJson(Map<String, dynamic> json) =>
+      _$InvoiceModelFromJson(json);
   // factory PurchaseModel.fromJson(dynamic json) {
   //   var list = json['invoiceItems'] as List;
   //   print(list.runtimeType); //returns List<dynamic>
@@ -59,7 +61,7 @@ class PurchaseModel {
   //       companyId: json['companyId'] as String);
   // }
 
-  Map<String, dynamic> toJson() => _$PurchaseModelToJson(this);
+  Map<String, dynamic> toJson() => _$InvoiceModelToJson(this);
 
   //   Map<String, dynamic> toJson(PurchaseModel instance) {
   //   var asd = instance.invoiceItems.map((e) => e.toJson()).toList();

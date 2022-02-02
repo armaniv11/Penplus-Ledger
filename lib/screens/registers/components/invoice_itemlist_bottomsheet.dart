@@ -14,8 +14,7 @@ import 'package:penon/database/database.dart';
 import 'package:penon/models/invoice_items_model.dart';
 import 'package:penon/models/ledger_model.dart';
 import 'package:penon/models/party_model.dart';
-import 'package:penon/models/purchase_model.dart';
-import 'package:penon/models/sale_model.dart';
+import 'package:penon/models/invoice_model.dart';
 import 'package:penon/screens/admin/components/invoice_items_grid.dart';
 import 'package:random_string/random_string.dart';
 
@@ -121,7 +120,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [Colors.blue[800]!, Colors.grey[800]!]),
+                      colors: [Colors.grey[900]!, Colors.grey]),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(8),
                       topRight: Radius.circular(8))),

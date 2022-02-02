@@ -5,8 +5,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/models/ledger_model.dart';
-import 'package:penon/models/purchase_model.dart';
-import 'package:penon/models/sale_model.dart';
+import 'package:penon/models/invoice_model.dart';
 import 'package:penon/screens/registers/components/invoice_itemlist_bottomsheet.dart';
 
 class LedgerList extends StatefulWidget {
@@ -36,7 +35,7 @@ class _LedgerListState extends State<LedgerList> {
     return GestureDetector(
       onTap: () async {
         await FirebaseFirestore.instance
-            .collection(widget.invoice.transactionType)
+            .collection('Invoices')
             .doc(widget.invoice.invoiceId)
             .get()
             .then((value) {
@@ -46,8 +45,8 @@ class _LedgerListState extends State<LedgerList> {
             context: context,
             builder: (context) {
               return InvoiceItemListBottomSheet(
-                  invoice:
-                      SaleModel.fromJson(value.data() as Map<String, dynamic>)
+                  invoice: InvoiceModel.fromJson(
+                      value.data() as Map<String, dynamic>)
 
                   // callback: changeCart,
                   );

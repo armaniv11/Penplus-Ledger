@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:penon/custom_widgets/widgets.dart';
-import 'package:penon/models/purchase_model.dart';
+import 'package:penon/models/invoice_model.dart';
 import 'package:penon/screens/registers/components/invoice_itemlist_bottomsheet.dart';
 
 class RegisterList extends StatefulWidget {
-  final invoice;
+  final InvoiceModel invoice;
   final int index;
   const RegisterList({Key? key, required this.invoice, required this.index})
       : super(key: key);
@@ -60,10 +60,15 @@ class _RegisterListState extends State<RegisterList> {
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
-                  child: const Icon(
-                    Icons.mode_edit_outline_outlined,
-                    color: Colors.grey,
-                    size: 16,
+                  child: InkWell(
+                    onTap: () {
+                      print(widget.invoice.invoiceType);
+                    },
+                    child: const Icon(
+                      Icons.mode_edit_outline_outlined,
+                      color: Colors.grey,
+                      size: 16,
+                    ),
                   ),
                 ),
                 InkWell(

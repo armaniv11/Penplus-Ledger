@@ -1,13 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'purchase_model.dart';
+part of 'invoice_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PurchaseModel _$PurchaseModelFromJson(Map<String, dynamic> json) =>
-    PurchaseModel(
+InvoiceModel _$InvoiceModelFromJson(Map<String, dynamic> json) => InvoiceModel(
       party: PartyModel.fromJson(json['party'] as Map<String, dynamic>),
       invoiceDate: json['invoiceDate'] == null
           ? null
@@ -22,6 +21,7 @@ PurchaseModel _$PurchaseModelFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['createdAt'] as String),
       companyId: json['companyId'] as String?,
+      invoiceType: json['invoiceType'] ?? "Purchase",
       invoiceItems: (json['invoiceItems'] as List<dynamic>)
           .map((e) => InvoiceItemsModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -31,7 +31,7 @@ PurchaseModel _$PurchaseModelFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['updatedAt'] as String),
     );
 
-Map<String, dynamic> _$PurchaseModelToJson(PurchaseModel instance) {
+Map<String, dynamic> _$InvoiceModelToJson(InvoiceModel instance) {
   var asd = instance.invoiceItems.map((e) => e.toJson()).toList();
 
   return <String, dynamic>{
@@ -46,6 +46,7 @@ Map<String, dynamic> _$PurchaseModelToJson(PurchaseModel instance) {
     'companyId': instance.companyId,
     'isDeleted': instance.isDeleted,
     'invoiceItems': asd,
+    'invoiceType': instance.invoiceType,
     'createdAt': instance.createdAt?.toIso8601String(),
     'updatedAt': instance.updatedAt?.toIso8601String(),
   };

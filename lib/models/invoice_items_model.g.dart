@@ -14,7 +14,7 @@ InvoiceItemsModel _$InvoiceItemsModelFromJson(Map<String, dynamic> json) =>
       quantity: (json['quantity'] as num?)?.toDouble() ?? 1,
       unitPrice: (json['unitPrice'] as num?)?.toDouble() ?? 0,
       total: (json['total'] as num?)?.toDouble() ?? 0,
-      taxPercent: (json['taxPercent'] as num?)?.toDouble() ?? 0,
+      taxPercent: json['taxPercent'] as String? ?? "0",
       cgst: (json['cgst'] as num?)?.toDouble() ?? 0,
       sgst: (json['sgst'] as num?)?.toDouble() ?? 0,
       igst: (json['igst'] as num?)?.toDouble() ?? 0,

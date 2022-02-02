@@ -22,10 +22,23 @@ class InvoiceItemsController extends GetxController {
   //     cartItems.fold(0, (sum, element) => sum + (element.deliveryCharge));
 
   String get totalAfterDeduction {
-    double asd = invoiceItems.fold(
-        0, (sum, element) => sum + (element.total! * element.quantity!));
+    if (invoiceItems.isEmpty) {
+      print("if Running");
+      cashDiscount.value = 0.0;
+      paidAmount.value = 0.0;
+      dueAmount.value = 0.0;
+      return '0';
+    } else {
+      print("else part Running");
 
-    return (asd - cashDiscount.value).toStringAsFixed(2);
+      double asd = invoiceItems.fold(
+          0, (sum, element) => sum + (element.total! * element.quantity!));
+      if (cashDiscount.value == 0) {
+        return asd.toStringAsFixed(2);
+      }
+
+      return (asd - cashDiscount.value).toStringAsFixed(2);
+    }
   }
 
   String get dueAfterPaid {
@@ -48,18 +61,19 @@ class InvoiceItemsController extends GetxController {
       print("replaced");
       invoiceItems[itemIndex] = item;
     }
+    dueAmount.value = double.tryParse(totalAfterDeduction)!;
   }
 
   deleteIndex(int index) {
     invoiceItems.removeAt(index);
   }
 
-  addCashDiscount(disc) {
-    cashDiscount.value = double.tryParse(disc)!;
+  addCashDiscount(String disc) {
+    cashDiscount.value = disc.isEmpty ? 0 : double.tryParse(disc)!;
   }
 
   addPaidAmount(amt) {
-    paidAmount.value = double.tryParse(amt)!;
+    paidAmount.value = double.tryParse(amt) ?? 0;
   }
 
   clearInvoiceItems() {

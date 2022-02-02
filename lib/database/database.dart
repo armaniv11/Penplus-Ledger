@@ -5,8 +5,8 @@ import 'package:penon/models/company_model.dart';
 import 'package:penon/models/item_model.dart';
 import 'package:penon/models/ledger_model.dart';
 import 'package:penon/models/party_model.dart';
-import 'package:penon/models/purchase_model.dart';
-import 'package:penon/models/sale_model.dart';
+import 'package:penon/models/invoice_model.dart';
+
 // import 'package:jiffy/jiffy.dart';
 
 class DatabaseService {
@@ -158,36 +158,37 @@ class DatabaseService {
         );
   }
 
-  Future addPurchase({required PurchaseModel purchase}) async {
+  Future addInvoice({required InvoiceModel invoice}) async {
     // Map<String, dynamic> pur = purchase.toJson();
     // pur['invoiceId'] = FieldValue.increment(1);
     await FirebaseFirestore.instance
-        .collection('Purchase')
-        .doc("purchase.invoiceId")
+        .collection('Invoices')
+        .doc(invoice.invoiceId)
         .set(
-          purchase.toJson(),
+          invoice.toJson(),
         );
   }
 
-  Future<List<PurchaseModel>> loadPurchaseRegister() async {
+  Future<List<InvoiceModel>> loadRegister(invoiceType) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('Purchase')
+        .collection('Invoices')
         .where('companyId', isEqualTo: '8874030006')
+        .where('invoiceType', isEqualTo: invoiceType)
         .get();
     return querySnapshot.docs
-        .map((e) => PurchaseModel.fromJson(e.data() as Map<String, dynamic>))
+        .map((e) => InvoiceModel.fromJson(e.data() as Map<String, dynamic>))
         .toList();
   }
 
-  Future<List<SaleModel>> loadSaleRegister() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('Sale')
-        .where('companyId', isEqualTo: '8874030006')
-        .get();
-    return querySnapshot.docs
-        .map((e) => SaleModel.fromJson(e.data() as Map<String, dynamic>))
-        .toList();
-  }
+  // Future<List<SaleModel>> loadSaleRegister() async {
+  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  //       .collection('Sale')
+  //       .where('companyId', isEqualTo: '8874030006')
+  //       .get();
+  //   return querySnapshot.docs
+  //       .map((e) => SaleModel.fromJson(e.data() as Map<String, dynamic>))
+  //       .toList();
+  // }
 
   Future<List<LedgerModel>> loadLedger() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance

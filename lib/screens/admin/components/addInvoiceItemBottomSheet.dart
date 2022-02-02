@@ -15,8 +15,8 @@ import 'package:penon/models/company_model.dart';
 import 'package:penon/models/invoice_items_model.dart';
 import 'package:penon/models/ledger_model.dart';
 import 'package:penon/models/party_model.dart';
-import 'package:penon/models/purchase_model.dart';
-import 'package:penon/models/sale_model.dart';
+import 'package:penon/models/invoice_model.dart';
+
 import 'package:penon/screens/admin/components/invoice_items_grid.dart';
 import 'package:random_string/random_string.dart';
 
@@ -49,7 +49,7 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
 
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
-  List<dynamic> asd = [];
+
   var db = FirebaseFirestore.instance;
 //Create a batch
 
@@ -62,33 +62,29 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
     });
     var batch = db.batch();
     List<dynamic> asd = [];
-    invoiceItemsController.invoiceItems.forEach((element) {
-      asd.add(element.toJson());
-    });
-    print(widget.partyName.mob1);
-    String invId = randomAlphaNumeric(6);
-    // List<InvoiceItemsModel> asdf = <InvoiceItemsModel>[];
 
-    // PartyModel par = PartyModel(partyName: 'asdff', companyId: '12');
-    // });Timestamp.fromDate(currentPhoneDate)
-    SaleModel purchase = SaleModel(
+    print(widget.partyName.mob1);
+    String invId = randomAlphaNumeric(12);
+    InvoiceModel invoice = InvoiceModel(
         party: widget.partyName,
         invoiceDate: DateTime.parse(widget.invoiceDate),
         invoiceItems: invoiceItemsController.invoiceItems,
         invoiceNo: widget.invoiceNo,
         invoiceId: invId,
         createdAt: DateTime.now(),
+        invoiceType: widget.invoiceType,
         grandTotal: double.tryParse(invoiceItemsController.totalAfterDeduction),
-        cashDiscount: double.tryParse(discountController.text) ?? 0,
-        paidAmount: double.tryParse(paidController.text) ?? 0,
+        cashDiscount: invoiceItemsController.cashDiscount.value,
+        paidAmount: invoiceItemsController.paidAmount.value,
         dueAmount: double.tryParse(dueController.text) ?? 0,
         companyId: '8874030006');
-    print(purchase.toJson());
-    // var ssdd = jsonEncode(purchase);
-    // print(purchase.partyName.mob1);
-    // await databaseService.addPurchase(purchase: purchase);
+    // List<InvoiceItemsModel> asdf = <InvoiceItemsModel>[];
+
+    // PartyModel par = PartyModel(partyName: 'asdff', companyId: '12');
+    // });Timestamp.fromDate(currentPhoneDate)
+
     LedgerModel ledgerCredit = LedgerModel(
-        ledgerId: randomAlphaNumeric(6),
+        ledgerId: randomAlphaNumeric(10),
         partyId: widget.partyName,
         creditAmount:
             double.tryParse(invoiceItemsController.totalAfterDeduction)!,
@@ -116,16 +112,12 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
       batch.update(db.collection('Company').doc(companyInfo.mob1), {
         'saleInvoiceCount': FieldValue.increment(1),
       });
-      batch.set(
-        db.collection('Sale').doc(purchase.invoiceId),
-        purchase.toJson(),
-      );
-    } else {
-      batch.set(
-        db.collection('Purchase').doc(purchase.invoiceId),
-        purchase.toJson(),
-      );
     }
+
+    batch.set(
+      db.collection('Invoices').doc(invoice.invoiceId),
+      invoice.toJson(),
+    );
 
     batch.set(
       db.collection('Ledger').doc(ledgerCredit.ledgerId),
@@ -159,39 +151,36 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
   }
 
   loadData() async {
-    if (invoiceItemsController.cashDiscount != 0.0)
-      discountController.text = invoiceItemsController.cashDiscount.toString();
-
-    if (invoiceItemsController.paidAmount != 0.0)
-      paidController.text = invoiceItemsController.paidAmount.toString();
-
     if (invoiceItemsController.dueAmount != 0.0)
       dueController.text = invoiceItemsController.dueAfterPaid;
-
-    if (dueController.text.isEmpty) {
-      paidController.text = invoiceItemsController.totalAfterDeduction;
-      dueController.text = 0.toString();
-    }
   }
 
-  changeDisc(String data) {
-    if (data.isNotEmpty) invoiceItemsController.addCashDiscount(data);
-    print(data);
-    print(invoiceItemsController.cashDiscount);
+  changeDisc(String data) async {
+    await invoiceItemsController.addCashDiscount(data);
+    print("$data change disc");
+    print("${invoiceItemsController.cashDiscount} printing cashd");
     print(invoiceItemsController.totalAfterDeduction);
+    dueController.text = invoiceItemsController.dueAfterPaid;
   }
 
   changePaid(String data) async {
-    if (data.isNotEmpty) invoiceItemsController.addPaidAmount(data);
-    dueController.text = await invoiceItemsController.dueAfterPaid;
-    print(data);
-    print(invoiceItemsController.paidAmount);
+    invoiceItemsController.addPaidAmount(data);
+
+    dueController.text = invoiceItemsController.dueAfterPaid;
   }
 
   void deleteClicked(int index) {
     setState(() {
       invoiceItemsController.deleteIndex(index);
+      discountController.text = invoiceItemsController.cashDiscount.toString();
+      paidController.text = invoiceItemsController.paidAmount.toString();
+      dueController.text =
+          invoiceItemsController.totalAfterDeduction.toString();
     });
+  }
+
+  void editClicked(int Index) {
+    Navigator.pop(context, Index);
   }
 
   @override
@@ -269,10 +258,6 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
                     ],
                   ),
                 ),
-                // Divider(
-                //   thickness: 2,
-                //   color: Colors.yellow,
-                // ),
                 Expanded(
                   child: Container(
                     height: size.height * 0.65,
@@ -290,6 +275,7 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
                                   invoiceItem: controller.invoiceItems[index],
                                   isEditable: true,
                                   callback: deleteClicked,
+                                  callbackItemIndex: editClicked,
                                 );
                               });
                         })),
@@ -302,24 +288,82 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [Colors.blue[900]!, Colors.grey[800]!]),
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(8),
                           topRight: Radius.circular(8))),
                   child: Column(
                     children: [
                       Row(
                         children: [
-                          customTextFormField(
-                              discountController, "Disc.(Rs)", null,
-                              reverted: true,
-                              changed: changeDisc,
-                              width: size.width / 3),
-                          customTextFormField(paidController, "Paid(Rs)", null,
-                              reverted: true,
-                              changed: changePaid,
-                              width: size.width / 3),
-                          customTextFormField(dueController, "Due(Rs)", null,
-                              width: size.width / 3, enabled: false),
+                          Container(
+                            width: size.width / 3,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 4),
+                              child: GetX<InvoiceItemsController>(
+                                  builder: (controller) {
+                                return TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    initialValue:
+                                        controller.cashDiscount.toString(),
+                                    decoration: const InputDecoration(
+                                        label: Text('Disc (Rs)'),
+                                        labelStyle:
+                                            TextStyle(color: Colors.black),
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        isDense: true,
+                                        border: InputBorder.none),
+                                    onChanged: (val) {
+                                      changeDisc(val);
+                                    });
+                              }),
+                            ),
+                          ),
+                          Container(
+                            width: size.width / 3,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 4),
+                              child: GetX<InvoiceItemsController>(
+                                  builder: (controller) {
+                                return TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    initialValue:
+                                        controller.paidAmount.toString(),
+                                    decoration: const InputDecoration(
+                                        label: Text('Paid (Rs)'),
+                                        labelStyle:
+                                            TextStyle(color: Colors.black),
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        isDense: true,
+                                        border: InputBorder.none),
+                                    onChanged: (val) {
+                                      changePaid(val);
+                                    });
+                              }),
+                            ),
+                          ),
+                          Container(
+                            width: size.width / 3,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 4),
+                              child: TextFormField(
+                                enabled: false,
+                                keyboardType: TextInputType.number,
+                                controller: dueController,
+                                decoration: const InputDecoration(
+                                    label: Text('Due (Rs)'),
+                                    labelStyle: TextStyle(color: Colors.black),
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    isDense: true,
+                                    border: InputBorder.none),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       Row(
@@ -331,13 +375,13 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Invoice Total",
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   Text(
-                                    "${controller.totalAfterDeduction}",
-                                    style: TextStyle(
+                                    controller.totalAfterDeduction,
+                                    style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 30,
                                         fontWeight: FontWeight.bold),
@@ -346,12 +390,6 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
                               ),
                             );
                           }),
-                          // InkWell(
-                          //     onTap: () {
-                          //       // saveSubCategory();
-                          //       savePurchase();
-                          //     },
-                          //     child: customButton("Add", width: size.width / 2.1)),
                           Expanded(
                             child: InkWell(
                                 onTap: () {

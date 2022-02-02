@@ -21,7 +21,7 @@ import 'package:penon/database/database.dart';
 import 'package:penon/models/invoice_items_model.dart';
 import 'package:penon/models/item_model.dart';
 import 'package:penon/models/party_model.dart';
-import 'package:penon/models/purchase_model.dart';
+import 'package:penon/models/invoice_model.dart';
 import 'package:random_string/random_string.dart';
 
 import 'components/addInvoiceItemBottomSheet.dart';
@@ -39,6 +39,7 @@ class _AddPurchaseState extends State<AddPurchase> {
   final PartyController partyController = Get.find();
   final InvoiceItemsController invoiceItemsController = Get.find();
   TextEditingController selectedPartyController = TextEditingController();
+  TextEditingController selectedItemController = TextEditingController();
 
   TextEditingController invoiceNoController = TextEditingController();
   TextEditingController cashDiscountController = TextEditingController();
@@ -128,12 +129,30 @@ class _AddPurchaseState extends State<AddPurchase> {
     calcualateQty(selectedItemModel);
   }
 
+  editItem(int index) {
+    selectedItemModel = itemModelMenu[index];
+    _selectedItem = selectedItemModel.itemName;
+    print(_selectedItem);
+    InvoiceItemsModel invItem = invoiceItemsController.invoiceItems[index];
+    quantityController.text = invItem.quantity.toString();
+    selectedItemController.text = _selectedItem!;
+    unitPriceController.text = invItem.unitPrice.toString();
+
+    _selectedTax = invItem.taxPercent.toString();
+    _selectedUOM = invItem.uom;
+
+    calculateFieldWise();
+  }
+
   double cgst = 0;
   double sgst = 0;
   double igst = 0;
 
 // calculates when fields are edited manually
   calculateFieldWise() async {
+    setState(() {
+      isLoading = true;
+    });
     double qty = quantityController.text.isEmpty
         ? 1
         : double.tryParse(quantityController.text)!;
@@ -186,7 +205,7 @@ class _AddPurchaseState extends State<AddPurchase> {
         quantity: double.tryParse(quantityController.text),
         unitPrice: double.tryParse(unitPriceController.text),
         total: double.tryParse(totalController.text),
-        taxPercent: double.tryParse(_selectedTax!),
+        taxPercent: _selectedTax!,
         cgst: cgst,
         sgst: sgst,
         igst: igst,
@@ -194,23 +213,8 @@ class _AddPurchaseState extends State<AddPurchase> {
     // PurchaseModel purchase = PurchaseModel(invoiceNo: invoiceNoController.text, invoiceId: invoiceId)
 
     invoiceItemsController.addItemToInvoice(invoiceItem);
-
-    // await showModalBottomSheet(
-    //   isScrollControlled: true,
-    //   // isDismissible: true,
-    //   context: context,
-    //   builder: (context) {
-    //     return AddInvoiceItemBottomSheet(
-    //       partyName: selectedPartyModel!,
-    //       invoiceNo: invoiceNoController.text,
-    //       invoiceDate: selectedInvoiceDate,
-
-    //       // callback: changeCart,
-    //     );
-    //   },
-    // ).then((value) {
-    //   // if (value != null) _addItem(value);
-    // });
+    selectedItemController.clear();
+    unitPriceController.clear();
   }
 
   @override
@@ -337,7 +341,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                                         backgroundColor: Colors.grey))
                                 : InkWell(
                                     onTap: () async {
-                                      await showModalBottomSheet(
+                                      var asd = await showModalBottomSheet(
                                         isScrollControlled: true,
                                         // isDismissible: true,
                                         context: context,
@@ -352,7 +356,10 @@ class _AddPurchaseState extends State<AddPurchase> {
                                           );
                                         },
                                       ).then((value) {
-                                        // if (value != null) _addItem(value);
+                                        if (value != null) {
+                                          print("$value received");
+                                          editItem(value);
+                                        }
                                       });
                                     },
                                     child: customButton("view items",
@@ -421,7 +428,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                               ),
                               // ignore: prefer_const_constructors
                             ),
-                            SizedBox(
+                            const SizedBox(
                                 height: 20,
                                 child: VerticalDivider(
                                   color: Colors.blue,
@@ -429,7 +436,8 @@ class _AddPurchaseState extends State<AddPurchase> {
                                 )),
                             Expanded(
                               child: TypeAheadField(
-                                debounceDuration: Duration(milliseconds: 500),
+                                debounceDuration:
+                                    const Duration(milliseconds: 500),
                                 textFieldConfiguration: TextFieldConfiguration(
                                     controller: selectedPartyController,
                                     textCapitalization:
@@ -468,6 +476,15 @@ class _AddPurchaseState extends State<AddPurchase> {
                                 },
                               ),
                             ),
+                            selectedPartyController.text.isEmpty
+                                ? Container()
+                                : Padding(
+                                    padding: const EdgeInsets.only(left: 6),
+                                    child: InkWell(
+                                        onTap: () =>
+                                            selectedPartyController.clear(),
+                                        child: Icon(Icons.clear)),
+                                  )
                           ],
                         ),
                       ),
@@ -504,6 +521,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                               child: TypeAheadField(
                                 debounceDuration: Duration(milliseconds: 1000),
                                 textFieldConfiguration: TextFieldConfiguration(
+                                    controller: selectedItemController,
                                     textCapitalization:
                                         TextCapitalization.words,
                                     autofocus: false,
@@ -514,7 +532,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                                       filled: true,
                                       // contentPadding: EdgeInsets.only(left: 10),
                                       // suffixIcon: Icon(Icons.search),
-                                      hintText: _selectedItem,
+                                      // hintText: _selectedItem,
                                       border: InputBorder.none,
                                     )),
                                 suggestionsCallback: (product) async {
@@ -530,6 +548,8 @@ class _AddPurchaseState extends State<AddPurchase> {
                                   );
                                 },
                                 onSuggestionSelected: (ItemModel product) {
+                                  selectedItemController.text =
+                                      product.itemName;
                                   print(product.itemName);
                                   _selectedItem = product.itemName;
                                   selectedItemModel = product;
@@ -537,6 +557,15 @@ class _AddPurchaseState extends State<AddPurchase> {
                                 },
                               ),
                             ),
+                            selectedItemController.text.isEmpty
+                                ? Container()
+                                : Padding(
+                                    padding: const EdgeInsets.only(left: 6),
+                                    child: InkWell(
+                                        onTap: () =>
+                                            selectedItemController.clear(),
+                                        child: Icon(Icons.clear)),
+                                  )
                           ],
                         ),
                       ),
@@ -618,7 +647,8 @@ class _AddPurchaseState extends State<AddPurchase> {
                             duration: const Duration(seconds: 2),
                             backgroundColor: Colors.red[800]!,
                           )..show(context);
-                        } else if (_selectedItem == null) {
+                        } else if (_selectedItem == null ||
+                            selectedItemController.text.isEmpty) {
                           Flushbar(
                             title: "Oops!!",
                             message: "Please select an Item!!",
@@ -628,12 +658,13 @@ class _AddPurchaseState extends State<AddPurchase> {
                         } else {
                           print(_selectedParty);
                           saveItem();
+
                           Fluttertoast.showToast(
                               msg: "$_selectedItem added to InvoiceList!!",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.CENTER,
                               timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.red,
+                              backgroundColor: Colors.green,
                               textColor: Colors.white,
                               fontSize: 16.0);
                           // FlutterToast

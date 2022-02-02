@@ -11,12 +11,15 @@ class InvoiceItemGrid extends StatefulWidget {
   final int index;
   final bool isEditable;
   final ValueChanged<int>? callback;
+  final ValueChanged<int>? callbackItemIndex;
+
   const InvoiceItemGrid(
       {Key? key,
       required this.invoiceItem,
       required this.index,
       this.isEditable = false,
-      this.callback})
+      this.callback,
+      this.callbackItemIndex})
       : super(key: key);
 
   @override
@@ -62,9 +65,16 @@ class _InvoiceItemGridState extends State<InvoiceItemGrid> {
                         ? Container()
                         : Padding(
                             padding: const EdgeInsets.only(right: 10),
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.grey,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  widget.callbackItemIndex!(widget.index - 1);
+                                });
+                              },
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
                     !widget.isEditable
