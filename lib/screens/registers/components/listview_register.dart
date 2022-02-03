@@ -51,7 +51,7 @@ class _RegisterListState extends State<RegisterList> {
                         ),
                       )),
                 ),
-                Container(
+                SizedBox(
                   width: size.width * 0.7,
                   child: Text(
                     widget.invoice.party.partyName!,
@@ -116,7 +116,7 @@ class _RegisterListState extends State<RegisterList> {
                     children: [
                       const Text(
                         "invoice Date",
-                        style: const TextStyle(fontSize: 10),
+                        style: TextStyle(fontSize: 10),
                       ),
                       Text(
                         a,

@@ -24,54 +24,62 @@ class _DashboardState extends State<Dashboard> {
         children: [
           ElevatedButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddProduct()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddProduct()));
               },
-              child: Text("Add Product")),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddCompany()));
-              },
-              child: Text("Company Info")),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddParty()));
-              },
-              child: Text("Add Party")),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddPurchase()));
-              },
-              child: Text("New Purchase")),
+              child: const Text("Add Product")),
           ElevatedButton(
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PurchaseRegister()));
+                        builder: (context) => const AddCompany()));
               },
-              child: Text("Purchase Register")),
+              child: const Text("Company Info")),
           ElevatedButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddSale()));
+                    MaterialPageRoute(builder: (context) => const AddParty()));
               },
-              child: Text("New Sale")),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SaleRegister()));
-              },
-              child: Text("Sale Register")),
+              child: const Text("Add Party")),
           ElevatedButton(
               onPressed: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Ledger()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddPurchase()));
               },
-              child: Text("Ledger"))
+              child: const Text("New Purchase")),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PurchaseRegister()));
+              },
+              child: const Text("Purchase Register")),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const AddSale()));
+              },
+              child: const Text("New Sale")),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SaleRegister()));
+              },
+              child: const Text("Sale Register")),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Ledger()));
+              },
+              child: const Text("Ledger"))
         ],
       ),
     );

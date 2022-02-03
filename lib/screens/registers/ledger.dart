@@ -44,9 +44,6 @@ class _LedgerState extends State<Ledger> {
   loadData() async {
     databaseService.loadLedger().then((value) {
       ledger = value;
-      ledger.forEach((element) {
-        print(element.invoiceId);
-      });
       setState(() {
         isLoading = false;
       });
@@ -57,7 +54,7 @@ class _LedgerState extends State<Ledger> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover)),
       child: Scaffold(
@@ -82,23 +79,23 @@ class _LedgerState extends State<Ledger> {
                   child: Row(
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
-                      Container(
+                      SizedBox(
                           width: size.width * 0.46,
-                          child: Text(
+                          child: const Text(
                             "Party",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )),
-                      Container(
+                      SizedBox(
                           width: size.width * 0.24,
-                          child: Text(
+                          child: const Text(
                             "Credit",
                             textAlign: TextAlign.right,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )),
-                      Container(
+                      SizedBox(
                           width: size.width * 0.24,
-                          child: Text(
+                          child: const Text(
                             "Debit",
                             textAlign: TextAlign.right,
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -107,7 +104,7 @@ class _LedgerState extends State<Ledger> {
                   ),
                 ),
                 Expanded(
-                  child: Container(
+                  child: SizedBox(
                     height: size.height * 0.9,
                     child: ListView.builder(
                         itemCount: ledger.length,

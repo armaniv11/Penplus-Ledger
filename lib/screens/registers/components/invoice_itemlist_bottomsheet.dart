@@ -1,22 +1,7 @@
-import 'dart:convert';
-
-import 'package:another_flushbar/flushbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:penon/controllers/invoiceItemsController.dart';
 import 'package:penon/custom_widgets/widgets.dart';
-import 'package:penon/database/database.dart';
-import 'package:penon/models/invoice_items_model.dart';
-import 'package:penon/models/ledger_model.dart';
-import 'package:penon/models/party_model.dart';
-import 'package:penon/models/invoice_model.dart';
 import 'package:penon/screens/admin/components/invoice_items_grid.dart';
-import 'package:random_string/random_string.dart';
 
 class InvoiceItemListBottomSheet extends StatelessWidget {
   final invoice;
@@ -33,7 +18,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
       child: Container(
         // padding: EdgeInsets.only(top: 6),
         // height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(24), topLeft: Radius.circular(24))),
@@ -45,8 +30,8 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              padding: EdgeInsets.only(top: 6, bottom: 6),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.only(top: 6, bottom: 6),
+              decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
@@ -54,13 +39,13 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.edgesensor_high,
                     color: Colors.transparent,
                   ),
-                  Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4, bottom: 4),
+                  const Spacer(),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 4, bottom: 4),
                     child: Text(
                       "Invoice Items",
                       style: TextStyle(
@@ -72,18 +57,18 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
                   ),
                   Text(
                     " (${invoiceItems.length})",
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.grey,
                         // fontSize: 30,
                         fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   InkWell(
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 10),
+                    child: const Padding(
+                      padding: EdgeInsets.only(right: 10),
                       child: Icon(
                         Icons.close,
                         color: Colors.grey,
@@ -98,7 +83,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
             //   color: Colors.yellow,
             // ),
             Expanded(
-              child: Container(
+              child: SizedBox(
                 height: size.height * 0.65,
                 child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -121,7 +106,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [Colors.grey[900]!, Colors.grey]),
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(8),
                       topRight: Radius.circular(8))),
               child: Column(
@@ -133,7 +118,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
                       children: [
                         Column(
                           children: [
-                            Text(
+                            const Text(
                               'Discount',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 10),
@@ -145,7 +130,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            Text(
+                            const Text(
                               'Paid Amount',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 10),
@@ -157,7 +142,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            Text(
+                            const Text(
                               'Due Amount',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 10),
@@ -170,7 +155,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     height: 6,
                     color: Colors.white,
                   ),
@@ -197,7 +182,7 @@ class InvoiceItemListBottomSheet extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Invoice Total",
                               style: TextStyle(color: Colors.white),
                             ),

@@ -1,14 +1,10 @@
-import 'dart:io';
-
 import 'package:another_flushbar/flushbar.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:penon/appconstants.dart';
 import 'package:penon/controllers/itemController.dart';
@@ -21,9 +17,7 @@ import 'package:penon/database/database.dart';
 import 'package:penon/models/invoice_items_model.dart';
 import 'package:penon/models/item_model.dart';
 import 'package:penon/models/party_model.dart';
-import 'package:penon/models/invoice_model.dart';
 import 'package:random_string/random_string.dart';
-
 import 'components/addInvoiceItemBottomSheet.dart';
 
 class AddPurchase extends StatefulWidget {
@@ -40,7 +34,6 @@ class _AddPurchaseState extends State<AddPurchase> {
   final InvoiceItemsController invoiceItemsController = Get.find();
   TextEditingController selectedPartyController = TextEditingController();
   TextEditingController selectedItemController = TextEditingController();
-
   TextEditingController invoiceNoController = TextEditingController();
   TextEditingController cashDiscountController = TextEditingController();
   TextEditingController grandTotalController = TextEditingController();
@@ -78,16 +71,6 @@ class _AddPurchaseState extends State<AddPurchase> {
   DatabaseService databaseService = DatabaseService();
   final _formKey = GlobalKey<FormState>();
   PartyModel? selectedPartyModel;
-  // void selectParty(String selected) {
-  //   setState(() {
-  //     _selectedParty = selected;
-  //   });
-  //   selectedPartyModel =
-  //       partyModelMenu.firstWhere((element) => element.partyName == selected);
-  //   print("here");
-  //   print(selectedPartyModel);
-  //   // selectedPartyModel
-  // }
 
   void selectTax(String selected) {
     setState(() {
@@ -106,14 +89,12 @@ class _AddPurchaseState extends State<AddPurchase> {
 
   void selectTextField(String selected) {
     setState(() {
-      print(selected);
       calculateFieldWise();
     });
   }
 
   void selectInvoiceDate(String selected) {
     selectedInvoiceDate = selected;
-    print(selected);
   }
 
   late ItemModel selectedItemModel;
@@ -132,15 +113,12 @@ class _AddPurchaseState extends State<AddPurchase> {
   editItem(int index) {
     selectedItemModel = itemModelMenu[index];
     _selectedItem = selectedItemModel.itemName;
-    print(_selectedItem);
     InvoiceItemsModel invItem = invoiceItemsController.invoiceItems[index];
     quantityController.text = invItem.quantity.toString();
     selectedItemController.text = _selectedItem!;
     unitPriceController.text = invItem.unitPrice.toString();
-
     _selectedTax = invItem.taxPercent.toString();
     _selectedUOM = invItem.uom;
-
     calculateFieldWise();
   }
 
@@ -247,9 +225,10 @@ class _AddPurchaseState extends State<AddPurchase> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/bg.jpg'), fit: BoxFit.cover)),
+              image: const AssetImage('assets/images/bg.jpg'),
+              fit: BoxFit.cover)),
       child: Scaffold(
         backgroundColor: Colors.white.withOpacity(0.7),
         appBar: AppBar(
@@ -283,15 +262,15 @@ class _AddPurchaseState extends State<AddPurchase> {
                           blurRadius: 10.0,
                           spreadRadius: 2.0,
                         ), //BoxShadow
-                        BoxShadow(
+                        const BoxShadow(
                           color: Colors.blue,
-                          offset: const Offset(0.0, 0.0),
+                          offset: Offset(0.0, 0.0),
                           blurRadius: 0.0,
                           spreadRadius: 0.0,
                         ), //BoxShadow
                       ],
                       color: Colors.white,
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20))),
                   child: Row(
@@ -303,14 +282,14 @@ class _AddPurchaseState extends State<AddPurchase> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 4),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(6),
                                   color: Colors.grey),
                               child: Text(
                                 "${controller.countitems}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold),
@@ -320,7 +299,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                               controller.countitems > 1
                                   ? " Items  "
                                   : " Item  ",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.grey,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
@@ -332,7 +311,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                                         title: "Oops!!",
                                         message: "Invoice has 0 items!!",
                                         duration: const Duration(seconds: 3),
-                                      )..show(context);
+                                      ).show(context);
                                       // customToast("Add items to cart first!!");
                                     },
                                     child: customButton("View Items",
@@ -394,19 +373,6 @@ class _AddPurchaseState extends State<AddPurchase> {
                     heading: "Invoice Date",
                     callBack: selectInvoiceDate,
                   ),
-                  // CustomDropDown(
-                  //     heading: "Party",
-                  //     items: partyMenu,
-                  //     selected: _selectedParty,
-                  //     callBack: selectParty),
-                  // // customTextFormField(
-                  // //   hsnController,
-                  // //   "Item HSN",
-                  // //   Icon(
-                  // //     FontAwesomeIcons.gripVertical,
-                  // //     size: 16,
-                  // //   ),
-                  // // ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 4, right: 4, top: 6, bottom: 6),
@@ -448,9 +414,6 @@ class _AddPurchaseState extends State<AddPurchase> {
                                     decoration: const InputDecoration(
                                       fillColor: Colors.white,
                                       filled: true,
-                                      // contentPadding: EdgeInsets.only(left: 10),
-                                      // suffixIcon: Icon(Icons.search),
-                                      // hintText: _selectedParty,
                                       border: InputBorder.none,
                                     )),
                                 suggestionsCallback: (party) async {
@@ -527,12 +490,9 @@ class _AddPurchaseState extends State<AddPurchase> {
                                     autofocus: false,
                                     style: const TextStyle(
                                         color: Colors.grey, fontSize: 14),
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       fillColor: Colors.white,
                                       filled: true,
-                                      // contentPadding: EdgeInsets.only(left: 10),
-                                      // suffixIcon: Icon(Icons.search),
-                                      // hintText: _selectedItem,
                                       border: InputBorder.none,
                                     )),
                                 suggestionsCallback: (product) async {
@@ -564,14 +524,13 @@ class _AddPurchaseState extends State<AddPurchase> {
                                     child: InkWell(
                                         onTap: () =>
                                             selectedItemController.clear(),
-                                        child: Icon(Icons.clear)),
+                                        child: const Icon(Icons.clear)),
                                   )
                           ],
                         ),
                       ),
                     ),
                   ),
-
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -628,7 +587,6 @@ class _AddPurchaseState extends State<AddPurchase> {
                           width: width),
                     ],
                   ),
-
                   InkWell(
                       onTap: () async {
                         if (invoiceNoController.text.isEmpty) {
@@ -644,7 +602,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                             message: "Please select a party!!",
                             duration: const Duration(seconds: 2),
                             backgroundColor: Colors.red[800]!,
-                          )..show(context);
+                          ).show(context);
                         } else if (_selectedItem == null ||
                             selectedItemController.text.isEmpty) {
                           Flushbar(
@@ -652,7 +610,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                             message: "Please select an Item!!",
                             duration: const Duration(seconds: 2),
                             backgroundColor: Colors.red[800]!,
-                          )..show(context);
+                          ).show(context);
                         } else {
                           print(_selectedParty);
                           saveItem();

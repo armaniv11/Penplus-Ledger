@@ -29,9 +29,6 @@ class _LedgerListState extends State<LedgerList> {
     String invDate = widget.invoice.invoiceDate == null
         ? "No Date"
         : Jiffy(widget.invoice.invoiceDate.toString()).yMMMd;
-    // var a = Jiffy(widget.invoice.invoiceDate == null
-    //                         ? "No Date"
-    //                         : widget.invoice.invoiceDate.toString()).yMMMMd;
     return GestureDetector(
       onTap: () async {
         await FirebaseFirestore.instance
@@ -60,7 +57,7 @@ class _LedgerListState extends State<LedgerList> {
             margin: const EdgeInsets.only(bottom: 4),
             padding: const EdgeInsets.only(left: 4, right: 4),
             width: size.width,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
             ),
             child: Row(
@@ -74,28 +71,28 @@ class _LedgerListState extends State<LedgerList> {
                     style: const TextStyle(color: Colors.black),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                     height: 26,
                     child: VerticalDivider(
                       color: Colors.blue,
                       width: 6,
                       thickness: 1,
                     )),
-                Container(
+                SizedBox(
                   width: size.width * 0.40,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         widget.invoice.partyId.partyName!,
-                        style: TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                       Text(invDate)
                     ],
                   ),
                 ),
                 Container(
-                    padding: EdgeInsets.only(right: 2),
+                    padding: const EdgeInsets.only(right: 2),
                     width: size.width * 0.25,
                     color: Colors.orange[100],
                     height: 40,
@@ -103,15 +100,8 @@ class _LedgerListState extends State<LedgerList> {
                         widget.invoice.creditAmount.toString(),
                         fontsize: 14,
                         mainAxisAlignment: MainAxisAlignment.end)),
-                // SizedBox(
-                //     height: 30,
-                //     child: VerticalDivider(
-                //       color: Colors.blue[800],
-                //       thickness: 2,
-                //       width: 8,
-                //     )),
                 Container(
-                    padding: EdgeInsets.only(right: 2),
+                    padding: const EdgeInsets.only(right: 2),
                     color: Colors.green[100],
                     height: 40,
                     width: size.width * 0.25,
