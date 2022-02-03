@@ -1,19 +1,13 @@
-import 'dart:io';
-
 import 'package:another_flushbar/flushbar.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:penon/appconstants.dart';
 import 'package:penon/controllers/partyController.dart';
 import 'package:penon/custom_classes/custom_classes.dart';
 import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/database/database.dart';
-import 'package:penon/models/item_model.dart';
 import 'package:penon/models/party_model.dart';
 import 'package:random_string/random_string.dart';
 
@@ -268,7 +262,7 @@ class _AddPartyState extends State<AddParty> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage('assets/images/bg.jpg'), fit: BoxFit.cover)),
       child: Container(
@@ -295,7 +289,7 @@ class _AddPartyState extends State<AddParty> {
                     customTextFormField(
                         partyNameController,
                         "Party Name",
-                        Icon(
+                        const Icon(
                           FontAwesomeIcons.stickyNote,
                           size: 16,
                         ),
@@ -303,7 +297,7 @@ class _AddPartyState extends State<AddParty> {
                     customTextFormField(
                       addressController,
                       "Complete Address",
-                      Icon(
+                      const Icon(
                         Icons.pin_drop,
                         size: 16,
                       ),
@@ -316,7 +310,7 @@ class _AddPartyState extends State<AddParty> {
                     customTextFormField(
                       gstNoController,
                       "GSTIN Number",
-                      Icon(
+                      const Icon(
                         FontAwesomeIcons.info,
                         size: 16,
                       ),
@@ -329,7 +323,7 @@ class _AddPartyState extends State<AddParty> {
                     customTextFormField(
                       mobController,
                       "Mobile Number",
-                      Icon(
+                      const Icon(
                         FontAwesomeIcons.phone,
                         size: 16,
                       ),
@@ -338,7 +332,7 @@ class _AddPartyState extends State<AddParty> {
                     customTextFormField(
                         emailController,
                         "Email ID",
-                        Icon(
+                        const Icon(
                           Icons.local_post_office_outlined,
                           size: 16,
                         ),
@@ -346,7 +340,7 @@ class _AddPartyState extends State<AddParty> {
                     customTextFormField(
                       openingBalanceController,
                       "Opening Balance",
-                      Icon(
+                      const Icon(
                         FontAwesomeIcons.rupeeSign,
                         size: 16,
                       ),

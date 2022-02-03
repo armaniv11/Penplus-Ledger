@@ -25,13 +25,15 @@ class AddInvoiceItemBottomSheet extends StatefulWidget {
   final String invoiceNo;
   final String invoiceDate;
   final String invoiceType;
+  final InvoiceModel? updateInvoice;
 
   const AddInvoiceItemBottomSheet(
       {Key? key,
       required this.partyName,
       required this.invoiceNo,
       required this.invoiceDate,
-      required this.invoiceType})
+      required this.invoiceType,
+      this.updateInvoice})
       : super(key: key);
   // final ValueChanged<bool> callback;
 
@@ -52,39 +54,48 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
 
   var db = FirebaseFirestore.instance;
 //Create a batch
+  final box = GetStorage();
 
   savePurchase() async {
-    final box = GetStorage();
     CompanyModel companyInfo =
         CompanyModel.fromJson(box.read('selfcompanyinfo'));
     setState(() {
       isLoading = true;
     });
     var batch = db.batch();
-    List<dynamic> asd = [];
-
-    print(widget.partyName.mob1);
-    String invId = randomAlphaNumeric(12);
+    String invId = widget.updateInvoice == null
+        ? randomAlphaNumeric(12)
+        : widget.updateInvoice!.invoiceId;
+    String ledgerCreditID = widget.updateInvoice == null
+        ? randomAlphaNumeric(10)
+        : widget.updateInvoice!.ledgerCreditId;
+    String ledgerDebitID = widget.updateInvoice == null
+        ? randomAlphaNumeric(10)
+        : widget.updateInvoice!.ledgerDebitId;
+    // if (widget)
+    var createdAt = widget.updateInvoice == null
+        ? DateTime.now()
+        : widget.updateInvoice!.createdAt;
     InvoiceModel invoice = InvoiceModel(
         party: widget.partyName,
         invoiceDate: DateTime.parse(widget.invoiceDate),
         invoiceItems: invoiceItemsController.invoiceItems,
         invoiceNo: widget.invoiceNo,
         invoiceId: invId,
-        createdAt: DateTime.now(),
+        createdAt: widget.updateInvoice == null
+            ? DateTime.now()
+            : widget.updateInvoice!.createdAt,
         invoiceType: widget.invoiceType,
         grandTotal: double.tryParse(invoiceItemsController.totalAfterDeduction),
         cashDiscount: invoiceItemsController.cashDiscount.value,
         paidAmount: invoiceItemsController.paidAmount.value,
         dueAmount: double.tryParse(dueController.text) ?? 0,
-        companyId: '8874030006');
-    // List<InvoiceItemsModel> asdf = <InvoiceItemsModel>[];
-
-    // PartyModel par = PartyModel(partyName: 'asdff', companyId: '12');
-    // });Timestamp.fromDate(currentPhoneDate)
+        companyId: '8874030006',
+        ledgerCreditId: ledgerCreditID,
+        ledgerDebitId: ledgerDebitID);
 
     LedgerModel ledgerCredit = LedgerModel(
-        ledgerId: randomAlphaNumeric(10),
+        ledgerId: ledgerCreditID,
         partyId: widget.partyName,
         creditAmount:
             double.tryParse(invoiceItemsController.totalAfterDeduction)!,
@@ -96,7 +107,7 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
         createdAt: DateTime.now(),
         invoiceDate: DateTime.parse(widget.invoiceDate));
     LedgerModel ledgerDebit = LedgerModel(
-      ledgerId: randomAlphaNumeric(6),
+      ledgerId: ledgerDebitID,
       partyId: widget.partyName,
       creditAmount: 0,
       debitAmount: double.tryParse(paidController.text) ?? 0,
@@ -132,7 +143,7 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
       return Flushbar(
         title: "Success",
         message: "${widget.invoiceType} Invoice created Successfully!!",
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       )..show(context).then((value) {
           setState(() {
             isLoading = false;

@@ -57,12 +57,11 @@ class _AddSaleState extends State<AddSale> {
   String? _selectedUOM = "Pcs";
   String labelText = 'Add Item To Invoice';
   String? _selectedTax = '0';
+  String headingLabel = 'New Sale';
 
   late CompanyModel selfCompanyInfo;
 
-  List<String> partyMenu = [];
   List<PartyModel> partyModelMenu = [];
-  List<String> itemMenu = [];
   List<ItemModel> itemModelMenu = [];
 
   List<String> uomMenu = [
@@ -230,22 +229,28 @@ class _AddSaleState extends State<AddSale> {
   }
 
   loadData() async {
-    partyMenu =
-        await partyController.allParties.map((e) => e.partyName!).toList();
-    partyModelMenu = await partyController.allParties.map((e) => e).toList();
-    itemMenu = itemController.allItems.map((e) => e.itemName).toList();
+    partyModelMenu = partyController.allParties.map((e) => e).toList();
     itemModelMenu = itemController.allItems.map((e) => e).toList();
     selectedInvoiceDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     selfCompanyInfo = await SharedFunctions().getCompany();
-    invoiceNoController.text = selfCompanyInfo.session! +
-        ' / ' +
-        selfCompanyInfo.saleInvoiceCount.toString();
+    if (widget.updateInvoice == null) {
+      invoiceNoController.text = selfCompanyInfo.session! +
+          ' / ' +
+          selfCompanyInfo.saleInvoiceCount.toString();
+    } else {
+      print(widget.updateInvoice!.invoiceNo);
+      headingLabel = 'Update Sale';
+      invoiceNoController.text = widget.updateInvoice!.invoiceNo!;
+      selectedPartyController.text = widget.updateInvoice!.party.partyName!;
+      widget.updateInvoice!.invoiceItems.forEach((element) {
+        invoiceItemsController.addItemToInvoice(element);
+      });
+      selectedPartyModel = partyModelMenu.firstWhere(
+          (element) => element.pid == widget.updateInvoice!.party.pid);
+    }
 
     setState(() {
       isLoading = false;
-    });
-    itemMenu.forEach((element) {
-      print(element);
     });
   }
 
@@ -262,7 +267,7 @@ class _AddSaleState extends State<AddSale> {
           backgroundColor: Colors.transparent,
           iconTheme: IconThemeData(color: Colors.grey[800]),
           title: Text(
-            "Sale",
+            headingLabel,
             style: TextStyle(color: Colors.grey[900]),
           ),
           elevation: 0,
@@ -362,13 +367,6 @@ class _AddSaleState extends State<AddSale> {
                                           duration: const Duration(seconds: 2),
                                           backgroundColor: Colors.red[800]!,
                                         )..show(context);
-                                      } else if (_selectedItem == null) {
-                                        Flushbar(
-                                          title: "Oops!!",
-                                          message: "Please select an Item!!",
-                                          duration: const Duration(seconds: 2),
-                                          backgroundColor: Colors.red[800]!,
-                                        )..show(context);
                                       } else {
                                         await showModalBottomSheet(
                                           isScrollControlled: true,
@@ -381,6 +379,8 @@ class _AddSaleState extends State<AddSale> {
                                                   invoiceNoController.text,
                                               invoiceDate: selectedInvoiceDate!,
                                               invoiceType: 'Sale',
+                                              updateInvoice:
+                                                  widget.updateInvoice,
 
                                               // callback: changeCart,
                                             );

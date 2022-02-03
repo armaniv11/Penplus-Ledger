@@ -26,6 +26,8 @@ InvoiceModel _$InvoiceModelFromJson(Map<String, dynamic> json) => InvoiceModel(
           .map((e) => InvoiceItemsModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       isDeleted: json['isDeleted'] as bool? ?? false,
+      ledgerCreditId: json['ledgerCreditId'] as String,
+      ledgerDebitId: json['ledgerDebitId'] as String,
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
@@ -47,6 +49,8 @@ Map<String, dynamic> _$InvoiceModelToJson(InvoiceModel instance) {
     'isDeleted': instance.isDeleted,
     'invoiceItems': asd,
     'invoiceType': instance.invoiceType,
+    'ledgerCreditId': instance.ledgerCreditId,
+    'ledgerDebitId': instance.ledgerDebitId,
     'createdAt': instance.createdAt?.toIso8601String(),
     'updatedAt': instance.updatedAt?.toIso8601String(),
   };

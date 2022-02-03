@@ -385,7 +385,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                   customTextFormField(
                       invoiceNoController,
                       "Invoice No",
-                      Icon(
+                      const Icon(
                         FontAwesomeIcons.stickyNote,
                         size: 16,
                       ),
@@ -443,9 +443,9 @@ class _AddPurchaseState extends State<AddPurchase> {
                                     textCapitalization:
                                         TextCapitalization.words,
                                     autofocus: false,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.grey, fontSize: 14),
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       fillColor: Colors.white,
                                       filled: true,
                                       // contentPadding: EdgeInsets.only(left: 10),
@@ -468,7 +468,6 @@ class _AddPurchaseState extends State<AddPurchase> {
                                   );
                                 },
                                 onSuggestionSelected: (PartyModel party) {
-                                  print(party);
                                   selectedPartyController.text =
                                       party.partyName!;
                                   _selectedParty = party.partyName;
@@ -483,7 +482,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                                     child: InkWell(
                                         onTap: () =>
                                             selectedPartyController.clear(),
-                                        child: Icon(Icons.clear)),
+                                        child: const Icon(Icons.clear)),
                                   )
                           ],
                         ),
@@ -511,7 +510,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                               ),
                               // ignore: prefer_const_constructors
                             ),
-                            SizedBox(
+                            const SizedBox(
                                 height: 20,
                                 child: VerticalDivider(
                                   color: Colors.blue,
@@ -519,13 +518,14 @@ class _AddPurchaseState extends State<AddPurchase> {
                                 )),
                             Expanded(
                               child: TypeAheadField(
-                                debounceDuration: Duration(milliseconds: 1000),
+                                debounceDuration:
+                                    const Duration(milliseconds: 1000),
                                 textFieldConfiguration: TextFieldConfiguration(
                                     controller: selectedItemController,
                                     textCapitalization:
                                         TextCapitalization.words,
                                     autofocus: false,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.grey, fontSize: 14),
                                     decoration: InputDecoration(
                                       fillColor: Colors.white,
@@ -619,7 +619,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                       customTextFormField(
                           totalController,
                           "Total",
-                          Icon(
+                          const Icon(
                             FontAwesomeIcons.rupeeSign,
                             size: 16,
                           ),
@@ -631,15 +631,13 @@ class _AddPurchaseState extends State<AddPurchase> {
 
                   InkWell(
                       onTap: () async {
-                        print(_selectedParty);
-
                         if (invoiceNoController.text.isEmpty) {
                           Flushbar(
                             title: "Oops!!",
                             message: "Provide Invoice No!!",
                             duration: const Duration(seconds: 2),
                             backgroundColor: Colors.red[800]!,
-                          )..show(context);
+                          ).show(context);
                         } else if (selectedPartyController.text.isEmpty) {
                           Flushbar(
                             title: "Oops!!",

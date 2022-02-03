@@ -68,13 +68,13 @@ class _PurchaseRegisterState extends State<PurchaseRegister> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover)),
       child: Scaffold(
         backgroundColor: Colors.blue[200]!.withOpacity(0.4),
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.white),
+          iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: Colors.transparent,
           title: const Text(
             "Purchase Register",

@@ -20,6 +20,8 @@ class InvoiceModel {
   String? companyId;
   bool isDeleted;
   String invoiceType;
+  String ledgerCreditId;
+  String ledgerDebitId;
   List<InvoiceItemsModel> invoiceItems;
   @TimestampConvertDatetime()
   DateTime? createdAt;
@@ -40,7 +42,9 @@ class InvoiceModel {
       required this.invoiceItems,
       this.isDeleted = false,
       this.invoiceType = 'Purchase',
-      this.updatedAt});
+      this.updatedAt,
+      required this.ledgerCreditId,
+      required this.ledgerDebitId});
 
   factory InvoiceModel.fromJson(Map<String, dynamic> json) =>
       _$InvoiceModelFromJson(json);

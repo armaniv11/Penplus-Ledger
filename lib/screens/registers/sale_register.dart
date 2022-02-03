@@ -1,19 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:penon/appconstants.dart';
-
 import 'package:penon/controllers/partyController.dart';
-
 import 'package:penon/database/database.dart';
 import 'package:penon/models/invoice_model.dart';
-
 import 'package:penon/screens/registers/components/listview_register.dart';
-import 'package:random_string/random_string.dart';
 
 class SaleRegister extends StatefulWidget {
   const SaleRegister({
@@ -64,7 +55,7 @@ class _SaleRegisterState extends State<SaleRegister> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover)),
       child: Scaffold(

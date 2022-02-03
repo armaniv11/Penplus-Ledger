@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/models/invoice_model.dart';
+import 'package:penon/screens/admin/add_sale.dart';
 import 'package:penon/screens/registers/components/invoice_itemlist_bottomsheet.dart';
 
 class RegisterList extends StatefulWidget {
@@ -62,7 +63,14 @@ class _RegisterListState extends State<RegisterList> {
                   padding: const EdgeInsets.only(right: 10),
                   child: InkWell(
                     onTap: () {
-                      print(widget.invoice.invoiceType);
+                      if (widget.invoice.invoiceType == 'Sale') {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddSale(
+                                      updateInvoice: widget.invoice,
+                                    )));
+                      }
                     },
                     child: const Icon(
                       Icons.mode_edit_outline_outlined,

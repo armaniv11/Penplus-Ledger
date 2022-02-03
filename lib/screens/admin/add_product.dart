@@ -1,12 +1,9 @@
 import 'dart:io';
-
 import 'package:another_flushbar/flushbar.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:penon/appconstants.dart';
 import 'package:penon/controllers/itemController.dart';
@@ -75,7 +72,7 @@ class _AddProductState extends State<AddProduct> {
   ImagePicker picker = ImagePicker();
 
   getImage() async {
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
     final pickedFile =
         await picker.pickImage(source: ImageSource.gallery, imageQuality: 90);
     // setState(() {
@@ -339,7 +336,7 @@ class _AddProductState extends State<AddProduct> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage('assets/images/bg.jpg'), fit: BoxFit.cover)),
       child: Scaffold(
@@ -364,7 +361,7 @@ class _AddProductState extends State<AddProduct> {
                   customTextFormField(
                       itemNameController,
                       "Item Name",
-                      Icon(
+                      const Icon(
                         FontAwesomeIcons.stickyNote,
                         size: 16,
                       ),
@@ -372,7 +369,7 @@ class _AddProductState extends State<AddProduct> {
                   customTextFormField(
                     hsnController,
                     "Item HSN",
-                    Icon(
+                    const Icon(
                       FontAwesomeIcons.gripVertical,
                       size: 16,
                     ),
@@ -388,7 +385,7 @@ class _AddProductState extends State<AddProduct> {
                       customTextFormField(
                           purchasePriceController,
                           "Purchase Price",
-                          Icon(
+                          const Icon(
                             FontAwesomeIcons.rupeeSign,
                             size: 16,
                           ),
@@ -398,7 +395,7 @@ class _AddProductState extends State<AddProduct> {
                       customTextFormField(
                         sellPriceController,
                         "Sell Price",
-                        Icon(
+                        const Icon(
                           FontAwesomeIcons.rupeeSign,
                           size: 16,
                         ),
@@ -424,7 +421,7 @@ class _AddProductState extends State<AddProduct> {
                   customTextFormField(
                     descriptionController,
                     "Product Description",
-                    Icon(
+                    const Icon(
                       FontAwesomeIcons.info,
                       size: 16,
                     ),
@@ -441,7 +438,7 @@ class _AddProductState extends State<AddProduct> {
                             customTextFormField(
                                 rentController,
                                 "Rent Amount",
-                                Icon(
+                                const Icon(
                                   FontAwesomeIcons.rupeeSign,
                                   size: 16,
                                 ),
@@ -450,7 +447,7 @@ class _AddProductState extends State<AddProduct> {
                             customTextFormField(
                                 rentDepositController,
                                 "Security Deposit",
-                                Icon(
+                                const Icon(
                                   FontAwesomeIcons.rupeeSign,
                                   size: 16,
                                 ),
