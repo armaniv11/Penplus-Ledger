@@ -4,6 +4,7 @@ import 'package:penon/screens/admin/add_product.dart';
 import 'package:penon/screens/admin/add_purchase.dart';
 import 'package:penon/screens/admin/add_sale.dart';
 import 'package:penon/screens/admin/company_info.dart';
+import 'package:penon/screens/employee/add_payment.dart';
 import 'package:penon/screens/registers/ledger.dart';
 import 'package:penon/screens/registers/purchase_register.dart';
 import 'package:penon/screens/registers/sale_register.dart';
@@ -79,7 +80,15 @@ class _DashboardState extends State<Dashboard> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const Ledger()));
               },
-              child: const Text("Ledger"))
+              child: const Text("Ledger")),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddPayment()));
+              },
+              child: const Text("Make Payment"))
         ],
       ),
     );

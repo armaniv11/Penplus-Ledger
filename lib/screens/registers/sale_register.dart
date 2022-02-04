@@ -26,9 +26,7 @@ class _SaleRegisterState extends State<SaleRegister> {
   //     TextEditingController(text: '0');
 
   bool isLoading = true;
-
   DatabaseService databaseService = DatabaseService();
-
   final _formKey = GlobalKey<FormState>();
   List<InvoiceModel> SaleRegister = [];
 
@@ -42,9 +40,6 @@ class _SaleRegisterState extends State<SaleRegister> {
   loadData() async {
     databaseService.loadRegister('Sale').then((value) {
       SaleRegister = value;
-      SaleRegister.forEach((element) {
-        print(element.invoiceNo);
-      });
       setState(() {
         isLoading = false;
       });

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:penon/appconstants.dart';
-import 'package:penon/controllers/itemController.dart';
 import 'package:penon/screens/Dashboard/dashboard.dart';
 import 'package:penon/screens/auth/register_page_phone.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:get/get.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -21,7 +17,7 @@ class _SplashState extends State<Splash> {
     // await HelperFunctions.getUsernamePassword().then((value) async {
     //   if (value['username'] != null) await makePostRequest(value);
     // });
-    await Future.delayed(Duration(milliseconds: 5000), () {});
+    await Future.delayed(const Duration(milliseconds: 5000), () {});
     return true;
   }
 
@@ -104,7 +100,7 @@ class _SplashState extends State<Splash> {
   checkUserLoggedInStatus() async {
     if (box.read('isloggedin') == true) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Dashboard()));
+          context, MaterialPageRoute(builder: (context) => const Dashboard()));
     } else {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => RegisterPagePhone()));
@@ -117,13 +113,13 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color.fromRGBO(243, 242, 236, 1),
+      backgroundColor: const Color.fromRGBO(243, 242, 236, 1),
       body: Column(
         children: [
           Container(
             height: size.height / 2,
             width: double.maxFinite,
-            color: Color.fromRGBO(243, 242, 236, 1),
+            color: const Color.fromRGBO(243, 242, 236, 1),
             child: Center(
               child: Shimmer.fromColors(
                 baseColor: Colors.grey,
@@ -142,7 +138,7 @@ class _SplashState extends State<Splash> {
           Container(
             height: size.height / 2,
             // color: Colors.white,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(
                       'assets/images/splash.jpg',

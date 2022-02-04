@@ -16,11 +16,13 @@ LedgerModel _$LedgerModelFromJson(Map<String, dynamic> json) => LedgerModel(
       isDeleted: json['isDeleted'] as bool? ?? false,
       invoiceId: json['invoiceId'] as String,
       companyId: json['companyId'] as String,
-      invoiceNo: json['invoiceNo'] as String,
-      invoiceDate: DateTime.parse(json['createdAt'] as String),
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
+      invoiceNo: json['invoiceNo'] as String,
+      invoiceDate: json['invoiceDate'] == null
+          ? null
+          : DateTime.parse(json['invoiceDate'] as String),
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
@@ -38,7 +40,7 @@ Map<String, dynamic> _$LedgerModelToJson(LedgerModel instance) =>
       'invoiceId': instance.invoiceId,
       'companyId': instance.companyId,
       'invoiceNo': instance.invoiceNo,
-      'invoiceDate': instance.invoiceDate,
+      'invoiceDate': instance.invoiceDate?.toIso8601String(),
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
     };

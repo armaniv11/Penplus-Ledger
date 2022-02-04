@@ -57,6 +57,7 @@ class CustomDateField extends StatefulWidget {
   final double width;
   final double height;
   final String heading;
+  final initialDate;
   final Color bgColor;
   final Color headingColor;
   final ValueChanged<String>? callBack;
@@ -68,7 +69,8 @@ class CustomDateField extends StatefulWidget {
       required this.heading,
       this.bgColor = Colors.white,
       this.headingColor = Colors.grey,
-      required this.callBack})
+      required this.callBack,
+      required this.initialDate})
       : super(key: key);
 
   @override
@@ -76,11 +78,12 @@ class CustomDateField extends StatefulWidget {
 }
 
 class _CustomDateFieldState extends State<CustomDateField> {
-  String dateSelected = DateFormat('yyyy-MM-dd').format(DateTime.now());
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    print("initial Date");
+    print(widget.initialDate);
     String heading = widget.heading;
     return Padding(
       padding: const EdgeInsets.all(6.0),
@@ -103,7 +106,8 @@ class _CustomDateFieldState extends State<CustomDateField> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                dateSelected,
+                widget.initialDate ??
+                    DateFormat('yyyy-MM-dd').format(DateTime.now()),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -119,12 +123,12 @@ class _CustomDateFieldState extends State<CustomDateField> {
                     context: context,
                     firstDate: DateTime(2021),
                     lastDate: DateTime(2023),
-                    initialDate: DateTime.now());
+                    initialDate: DateTime.parse(widget.initialDate));
                 print(choice);
                 if (choice != null)
                   setState(() {
-                    dateSelected = DateFormat('yyyy-MM-dd').format(choice);
-                    widget.callBack!(dateSelected);
+                    // dateSelected = DateFormat('yyyy-MM-dd').format(choice);
+                    widget.callBack!(DateFormat('yyyy-MM-dd').format(choice));
                   });
               },
               child: Icon(

@@ -31,8 +31,8 @@ class InvoiceItemsController extends GetxController {
     } else {
       print("else part Running");
 
-      double asd = invoiceItems.fold(
-          0, (sum, element) => sum + (element.total! * element.quantity!));
+      double asd =
+          invoiceItems.fold(0, (sum, element) => sum + (element.total!));
       if (cashDiscount.value == 0) {
         return asd.toStringAsFixed(2);
       }
@@ -61,6 +61,10 @@ class InvoiceItemsController extends GetxController {
       print("replaced");
       invoiceItems[itemIndex] = item;
     }
+    invoiceItems.forEach((element) {
+      print(element.total);
+      print(element.quantity);
+    });
     dueAmount.value = double.tryParse(totalAfterDeduction)!;
   }
 

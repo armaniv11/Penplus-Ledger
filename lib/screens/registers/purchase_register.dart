@@ -17,14 +17,6 @@ class PurchaseRegister extends StatefulWidget {
 
 class _PurchaseRegisterState extends State<PurchaseRegister> {
   final PartyController partyController = Get.find();
-  // TextEditingController partyNameController = TextEditingController();
-  // TextEditingController gstNoController = TextEditingController();
-  // TextEditingController addressController = TextEditingController();
-  // TextEditingController emailController = TextEditingController();
-  // TextEditingController mobController = TextEditingController();
-  // TextEditingController openingBalanceController =
-  //     TextEditingController(text: '0');
-
   bool isLoading = true;
 
   DatabaseService databaseService = DatabaseService();

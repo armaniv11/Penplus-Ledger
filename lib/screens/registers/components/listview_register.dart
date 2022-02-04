@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/models/invoice_model.dart';
+import 'package:penon/screens/admin/add_purchase.dart';
 import 'package:penon/screens/admin/add_sale.dart';
 import 'package:penon/screens/registers/components/invoice_itemlist_bottomsheet.dart';
 
@@ -70,12 +72,19 @@ class _RegisterListState extends State<RegisterList> {
                                 builder: (context) => AddSale(
                                       updateInvoice: widget.invoice,
                                     )));
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddPurchase(
+                                      updateInvoice: widget.invoice,
+                                    )));
                       }
                     },
                     child: const Icon(
-                      Icons.mode_edit_outline_outlined,
+                      Icons.edit,
                       color: Colors.grey,
-                      size: 16,
+                      size: 20,
                     ),
                   ),
                 ),

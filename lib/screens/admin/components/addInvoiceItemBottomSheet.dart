@@ -63,28 +63,23 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
       isLoading = true;
     });
     var batch = db.batch();
-    String invId = widget.updateInvoice == null
-        ? randomAlphaNumeric(12)
-        : widget.updateInvoice!.invoiceId;
-    String ledgerCreditID = widget.updateInvoice == null
-        ? randomAlphaNumeric(10)
-        : widget.updateInvoice!.ledgerCreditId;
-    String ledgerDebitID = widget.updateInvoice == null
-        ? randomAlphaNumeric(10)
-        : widget.updateInvoice!.ledgerDebitId;
+    String invId =
+        updatable ? widget.updateInvoice!.invoiceId : randomAlphaNumeric(12);
+    String ledgerCreditID = updatable
+        ? widget.updateInvoice!.ledgerCreditId
+        : randomAlphaNumeric(10);
+    String ledgerDebitID = updatable
+        ? widget.updateInvoice!.ledgerDebitId
+        : randomAlphaNumeric(10);
     // if (widget)
-    var createdAt = widget.updateInvoice == null
-        ? DateTime.now()
-        : widget.updateInvoice!.createdAt;
     InvoiceModel invoice = InvoiceModel(
         party: widget.partyName,
         invoiceDate: DateTime.parse(widget.invoiceDate),
         invoiceItems: invoiceItemsController.invoiceItems,
         invoiceNo: widget.invoiceNo,
         invoiceId: invId,
-        createdAt: widget.updateInvoice == null
-            ? DateTime.now()
-            : widget.updateInvoice!.createdAt,
+        createdAt: updatable ? widget.updateInvoice!.createdAt : DateTime.now(),
+        updatedAt: updatable ? DateTime.now() : null,
         invoiceType: widget.invoiceType,
         grandTotal: double.tryParse(invoiceItemsController.totalAfterDeduction),
         cashDiscount: invoiceItemsController.cashDiscount.value,
@@ -126,23 +121,25 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
     }
 
     batch.set(
-      db.collection('Invoices').doc(invoice.invoiceId),
+      db.collection('Invoices').doc(invId),
       invoice.toJson(),
     );
 
     batch.set(
-      db.collection('Ledger').doc(ledgerCredit.ledgerId),
+      db.collection('Ledger').doc(ledgerCreditID),
       ledgerCredit.toJson(),
     );
     batch.set(
-      FirebaseFirestore.instance.collection('Ledger').doc(ledgerDebit.ledgerId),
+      FirebaseFirestore.instance.collection('Ledger').doc(ledgerDebitID),
       ledgerDebit.toJson(),
     );
     batch.commit().then((value) {
       invoiceItemsController.clearInvoiceItems();
       return Flushbar(
         title: "Success",
-        message: "${widget.invoiceType} Invoice created Successfully!!",
+        message: updatable
+            ? "${widget.invoiceType} Invoice updated Successfully!!"
+            : "${widget.invoiceType} Invoice created Successfully!!",
         duration: const Duration(seconds: 2),
       )..show(context).then((value) {
           setState(() {
@@ -154,8 +151,11 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
     // });
   }
 
+  bool updatable = false;
   @override
   void initState() {
+    updatable = widget.updateInvoice == null ? false : true;
+    print(updatable);
     loadData();
     // TODO: implement initState
     super.initState();
@@ -407,7 +407,8 @@ class _AddInvoiceItemBottomSheetState extends State<AddInvoiceItemBottomSheet> {
                                   // saveSubCategory();
                                   savePurchase();
                                 },
-                                child: customButton("Add",
+                                child: customButton(
+                                    updatable ? "Update" : "Add",
                                     width: size.width / 2.1,
                                     backgroundColor: Colors.yellow,
                                     padding: 4,

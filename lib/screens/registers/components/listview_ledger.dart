@@ -29,6 +29,7 @@ class _LedgerListState extends State<LedgerList> {
     String invDate = widget.invoice.invoiceDate == null
         ? "No Date"
         : Jiffy(widget.invoice.invoiceDate.toString()).yMMMd;
+
     return GestureDetector(
       onTap: () async {
         await FirebaseFirestore.instance

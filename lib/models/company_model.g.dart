@@ -23,9 +23,7 @@ CompanyModel _$CompanyModelFromJson(Map<String, dynamic> json) => CompanyModel(
           ? null
           : DateTime.parse(json['updatedAt'] as String),
       isDeleted: json['isDeleted'] as bool? ?? false,
-      permissions: (json['permissions'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      permissions: json['permissions'] as List<dynamic>?,
       saleInvoiceCount: json['saleInvoiceCount'] as int? ?? 0,
       session: json['session'] as String? ?? '2021-22',
     );

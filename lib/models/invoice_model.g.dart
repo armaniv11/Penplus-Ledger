@@ -21,16 +21,16 @@ InvoiceModel _$InvoiceModelFromJson(Map<String, dynamic> json) => InvoiceModel(
           ? null
           : DateTime.parse(json['createdAt'] as String),
       companyId: json['companyId'] as String?,
-      invoiceType: json['invoiceType'] ?? "Purchase",
       invoiceItems: (json['invoiceItems'] as List<dynamic>)
           .map((e) => InvoiceItemsModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       isDeleted: json['isDeleted'] as bool? ?? false,
-      ledgerCreditId: json['ledgerCreditId'] as String,
-      ledgerDebitId: json['ledgerDebitId'] as String,
+      invoiceType: json['invoiceType'] as String? ?? 'Purchase',
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
+      ledgerCreditId: json['ledgerCreditId'] as String,
+      ledgerDebitId: json['ledgerDebitId'] as String,
     );
 
 Map<String, dynamic> _$InvoiceModelToJson(InvoiceModel instance) {
@@ -47,13 +47,11 @@ Map<String, dynamic> _$InvoiceModelToJson(InvoiceModel instance) {
     'invoiceId': instance.invoiceId,
     'companyId': instance.companyId,
     'isDeleted': instance.isDeleted,
-    'invoiceItems': asd,
     'invoiceType': instance.invoiceType,
     'ledgerCreditId': instance.ledgerCreditId,
     'ledgerDebitId': instance.ledgerDebitId,
+    'invoiceItems': asd,
     'createdAt': instance.createdAt?.toIso8601String(),
     'updatedAt': instance.updatedAt?.toIso8601String(),
   };
 }
-  //   var asd = instance.invoiceItems.map((e) => e.toJson()).toList();
-

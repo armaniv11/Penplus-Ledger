@@ -10,6 +10,8 @@ import 'package:penon/models/invoice_model.dart';
 // import 'package:jiffy/jiffy.dart';
 
 class DatabaseService {
+  var db = FirebaseFirestore.instance;
+
   Future clienttagList(tagname, tagid) async {
     await FirebaseFirestore.instance.collection('clients').doc(tagid).update({
       "tag": tagname,
@@ -199,6 +201,20 @@ class DatabaseService {
     return querySnapshot.docs
         .map((e) => LedgerModel.fromJson(e.data() as Map<String, dynamic>))
         .toList();
+  }
+
+  Future deleteInvoice(invId, creditId, debitId) async {
+    var batch = db.batch();
+    batch.delete(
+      db.collection('Invoices').doc(invId),
+    );
+    batch.delete(
+      db.collection('Ledger').doc(creditId),
+    );
+    batch.delete(
+      db.collection('Ledger').doc(debitId),
+    );
+    batch.commit();
   }
 
   Future newProduct(

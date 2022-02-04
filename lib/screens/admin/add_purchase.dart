@@ -14,15 +14,19 @@ import 'package:penon/custom_classes/custom_classes.dart';
 import 'package:penon/custom_functions/custom_functions.dart';
 import 'package:penon/custom_widgets/widgets.dart';
 import 'package:penon/database/database.dart';
+import 'package:penon/models/company_model.dart';
 import 'package:penon/models/invoice_items_model.dart';
+import 'package:penon/models/invoice_model.dart';
 import 'package:penon/models/item_model.dart';
 import 'package:penon/models/party_model.dart';
+import 'package:penon/screens/shared/shared_functions.dart';
 import 'package:random_string/random_string.dart';
 import 'components/addInvoiceItemBottomSheet.dart';
 
 class AddPurchase extends StatefulWidget {
-  final String? productId;
-  const AddPurchase({Key? key, this.productId = ''}) : super(key: key);
+  final InvoiceModel? updateInvoice;
+
+  const AddPurchase({Key? key, this.updateInvoice}) : super(key: key);
 
   @override
   _AddPurchaseState createState() => _AddPurchaseState();
@@ -49,9 +53,7 @@ class _AddPurchaseState extends State<AddPurchase> {
   String labelText = 'Add Item To Invoice';
   String? _selectedTax = '0';
 
-  List<String> partyMenu = [];
   List<PartyModel> partyModelMenu = [];
-  List<String> itemMenu = [];
   List<ItemModel> itemModelMenu = [];
 
   List<String> uomMenu = [
@@ -61,6 +63,7 @@ class _AddPurchaseState extends State<AddPurchase> {
     'Dozen',
     'Pound',
   ];
+  late CompanyModel selfCompanyInfo;
 
   List<String> taxMenu = AppConstants.gstMenu;
 
@@ -125,6 +128,7 @@ class _AddPurchaseState extends State<AddPurchase> {
   double cgst = 0;
   double sgst = 0;
   double igst = 0;
+  String headingLabel = "New Purchase";
 
 // calculates when fields are edited manually
   calculateFieldWise() async {
@@ -199,25 +203,44 @@ class _AddPurchaseState extends State<AddPurchase> {
   void initState() {
     invoiceItemsController.clearInvoiceItems();
 
-    loadData();
+    loadData().then((value) {
+      checkOptions();
+    });
 
     // TODO: implement initState
     super.initState();
   }
 
-  loadData() async {
-    partyMenu =
-        await partyController.allParties.map((e) => e.partyName!).toList();
-    partyModelMenu = await partyController.allParties.map((e) => e).toList();
-    itemMenu = itemController.allItems.map((e) => e.itemName).toList();
+  Future loadData() async {
+    partyModelMenu = partyController.allParties.map((e) => e).toList();
     itemModelMenu = itemController.allItems.map((e) => e).toList();
-    selectedInvoiceDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    selfCompanyInfo = await SharedFunctions().getCompany();
+  }
 
+  checkOptions() async {
+    if (widget.updateInvoice == null) {
+      selectedInvoiceDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    } else {
+      headingLabel = 'Update Purchase';
+      selectedInvoiceDate =
+          DateFormat('yyyy-MM-dd').format(widget.updateInvoice!.invoiceDate!);
+      print(headingLabel);
+      print(selectedInvoiceDate);
+
+      invoiceNoController.text = widget.updateInvoice!.invoiceNo!;
+      selectedPartyController.text = widget.updateInvoice!.party.partyName!;
+      for (var element in widget.updateInvoice!.invoiceItems) {
+        invoiceItemsController.addItemToInvoice(element);
+      }
+      selectedPartyModel = partyModelMenu.firstWhere(
+          (element) => element.pid == widget.updateInvoice!.party.pid);
+      invoiceItemsController.cashDiscount.value =
+          widget.updateInvoice!.cashDiscount!;
+      invoiceItemsController.paidAmount.value =
+          widget.updateInvoice!.paidAmount!;
+    }
     setState(() {
       isLoading = false;
-    });
-    itemMenu.forEach((element) {
-      print(element);
     });
   }
 
@@ -227,15 +250,14 @@ class _AddPurchaseState extends State<AddPurchase> {
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
-              image: const AssetImage('assets/images/bg.jpg'),
-              fit: BoxFit.cover)),
+              image: AssetImage('assets/images/bg.jpg'), fit: BoxFit.cover)),
       child: Scaffold(
         backgroundColor: Colors.white.withOpacity(0.7),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           iconTheme: IconThemeData(color: Colors.grey[800]),
           title: Text(
-            "Purchase",
+            headingLabel,
             style: TextStyle(color: Colors.grey[900]),
           ),
           elevation: 0,
@@ -330,6 +352,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                                             invoiceNo: invoiceNoController.text,
                                             invoiceDate: selectedInvoiceDate!,
                                             invoiceType: 'Purchase',
+                                            updateInvoice: widget.updateInvoice,
 
                                             // callback: changeCart,
                                           );
@@ -370,6 +393,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                       ),
                       validationEnabled: true),
                   CustomDateField(
+                    initialDate: selectedInvoiceDate,
                     heading: "Invoice Date",
                     callBack: selectInvoiceDate,
                   ),

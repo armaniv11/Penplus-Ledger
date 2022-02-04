@@ -5,7 +5,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:penon/controllers/itemController.dart';
 import 'package:penon/controllers/partyController.dart';
 import 'package:penon/controllers/invoiceItemsController.dart';
-import 'package:penon/screens/auth/register_page_phone.dart';
 import 'package:penon/splash.dart';
 
 void main() async {

@@ -197,23 +197,6 @@ class _AddSaleState extends State<AddSale> {
     // PurchaseModel purchase = PurchaseModel(invoiceNo: invoiceNoController.text, invoiceId: invoiceId)
 
     invoiceItemsController.addItemToInvoice(invoiceItem);
-
-    // await showModalBottomSheet(
-    //   isScrollControlled: true,
-    //   // isDismissible: true,
-    //   context: context,
-    //   builder: (context) {
-    //     return AddInvoiceItemBottomSheet(
-    //       partyName: selectedPartyModel!,
-    //       invoiceNo: invoiceNoController.text,
-    //       invoiceDate: selectedInvoiceDate,
-
-    //       // callback: changeCart,
-    //     );
-    //   },
-    // ).then((value) {
-    //   // if (value != null) _addItem(value);
-    // });
   }
 
   final box = GetStorage();
@@ -222,31 +205,42 @@ class _AddSaleState extends State<AddSale> {
   void initState() {
     invoiceItemsController.clearInvoiceItems();
 
-    loadData();
+    loadData().then((value) {
+      checkOptions();
+    });
 
     // TODO: implement initState
     super.initState();
   }
 
-  loadData() async {
+  Future loadData() async {
     partyModelMenu = partyController.allParties.map((e) => e).toList();
     itemModelMenu = itemController.allItems.map((e) => e).toList();
-    selectedInvoiceDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     selfCompanyInfo = await SharedFunctions().getCompany();
+  }
+
+  checkOptions() async {
     if (widget.updateInvoice == null) {
       invoiceNoController.text = selfCompanyInfo.session! +
           ' / ' +
           selfCompanyInfo.saleInvoiceCount.toString();
+      selectedInvoiceDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     } else {
-      print(widget.updateInvoice!.invoiceNo);
       headingLabel = 'Update Sale';
+      selectedInvoiceDate =
+          DateFormat('yyyy-MM-dd').format(widget.updateInvoice!.invoiceDate!);
+
       invoiceNoController.text = widget.updateInvoice!.invoiceNo!;
       selectedPartyController.text = widget.updateInvoice!.party.partyName!;
-      widget.updateInvoice!.invoiceItems.forEach((element) {
+      for (var element in widget.updateInvoice!.invoiceItems) {
         invoiceItemsController.addItemToInvoice(element);
-      });
+      }
       selectedPartyModel = partyModelMenu.firstWhere(
           (element) => element.pid == widget.updateInvoice!.party.pid);
+      invoiceItemsController.cashDiscount.value =
+          widget.updateInvoice!.cashDiscount!;
+      invoiceItemsController.paidAmount.value =
+          widget.updateInvoice!.paidAmount!;
     }
 
     setState(() {
@@ -419,6 +413,7 @@ class _AddSaleState extends State<AddSale> {
                       ),
                       validationEnabled: true),
                   CustomDateField(
+                    initialDate: selectedInvoiceDate,
                     heading: "Invoice Date",
                     callBack: selectInvoiceDate,
                   ),
